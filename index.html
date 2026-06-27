@@ -35,7 +35,6 @@
   html { background: var(--bg); color: var(--text); font-family: var(--font); }
   body { min-height: 100vh; display: flex; flex-direction: column; }
 
-  /* HEADER */
   .top-bar {
     display: flex; align-items: center; justify-content: space-between;
     padding: 16px 24px; border-bottom: 1px solid var(--border);
@@ -59,16 +58,14 @@
   .status-pill.on { background: var(--green-dim); color: var(--green); border-color: rgba(62,207,142,0.2); }
   .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
-  /* LAYOUT */
   .main { display: flex; flex: 1; }
   .sidebar {
     width: 260px; flex-shrink: 0; border-right: 1px solid var(--border);
     padding: 20px 16px; display: flex; flex-direction: column; gap: 6px;
     background: var(--bg); position: sticky; top: 57px; height: calc(100vh - 57px); overflow-y: auto;
   }
-  .content { flex: 1; padding: 24px; max-width: 900px; }
+  .content { flex: 1; padding: 24px; max-width: 920px; }
 
-  /* SIDEBAR NAV */
   .nav-label { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; padding: 8px 8px 4px; }
   .nav-item {
     display: flex; align-items: center; gap: 8px; padding: 8px 10px;
@@ -78,48 +75,66 @@
   }
   .nav-item:hover { background: var(--bg3); color: var(--text); }
   .nav-item.active { background: var(--accent-dim); color: var(--accent); }
-  .nav-item i { font-size: 15px; }
 
-  /* PANELS */
   .panel { display: none; }
   .panel.active { display: block; }
 
-  /* SECTION HEADER */
   .sec-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
   .sec-title { font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; }
   .sec-sub { font-size: 13px; color: var(--text3); margin-top: 3px; }
 
-  /* BUTTONS */
   .btn {
     display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px;
     font-size: 13px; border-radius: var(--radius-sm); border: 1px solid var(--border2);
     background: var(--bg3); color: var(--text); cursor: pointer; font-family: var(--font);
-    transition: background .15s, border-color .15s; font-weight: 400;
+    transition: background .15s; font-weight: 400;
   }
-  .btn:hover:not(:disabled) { background: var(--bg4); border-color: var(--border2); }
+  .btn:hover:not(:disabled) { background: var(--bg4); }
   .btn:disabled { opacity: .4; cursor: not-allowed; }
-  .btn-primary {
-    background: var(--accent-dim); border-color: rgba(79,156,240,0.3); color: var(--accent);
-  }
+  .btn-primary { background: var(--accent-dim); border-color: rgba(79,156,240,0.3); color: var(--accent); }
   .btn-primary:hover:not(:disabled) { background: rgba(79,156,240,0.2); }
-  .btn-green {
-    background: var(--green-dim); border-color: rgba(62,207,142,0.3); color: var(--green);
-  }
+  .btn-green { background: var(--green-dim); border-color: rgba(62,207,142,0.3); color: var(--green); }
   .btn-green:hover:not(:disabled) { background: rgba(62,207,142,0.2); }
-  .btn-icon {
-    width: 30px; height: 30px; padding: 0; justify-content: center; flex-shrink: 0;
-  }
+  .btn-icon { width: 30px; height: 30px; padding: 0; justify-content: center; flex-shrink: 0; }
 
-  /* CARDS */
+  /* SEMÁFORO */
+  .semaforo {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 600;
+  }
+  .sem-verde { background: var(--green-dim); color: var(--green); border: 1px solid rgba(62,207,142,0.3); }
+  .sem-amarillo { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,166,35,0.3); }
+  .sem-rojo { background: var(--red-dim); color: var(--red); border: 1px solid rgba(240,100,73,0.3); }
+
+  /* EXECUTIVE SUMMARY */
+  .exec-summary {
+    background: linear-gradient(135deg, rgba(79,156,240,0.08), rgba(62,207,142,0.06));
+    border: 1px solid rgba(79,156,240,0.2);
+    border-radius: var(--radius); padding: 16px; margin-bottom: 14px;
+  }
+  .exec-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+  .exec-label { font-size: 10px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .08em; }
+  .exec-text { font-size: 13px; color: var(--text); line-height: 1.65; white-space: pre-wrap; }
+
+  /* YIELD ON COST */
+  .yoc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 8px; margin-bottom: 14px; }
+  .yoc-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 12px; text-align: center;
+  }
+  .yoc-val { font-size: 22px; font-weight: 600; font-family: var(--mono); }
+  .yoc-val.green { color: var(--green); }
+  .yoc-val.accent { color: var(--accent); }
+  .yoc-val.amber { color: var(--amber); }
+  .yoc-label { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
   .company-card {
     background: var(--bg2); border: 1px solid var(--border);
     border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;
     transition: border-color .2s;
   }
   .company-card:hover { border-color: var(--border2); }
-  .card-header {
-    display: flex; align-items: center; gap: 12px; padding: 14px 16px;
-  }
+  .card-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
   .ticker-box {
     width: 50px; height: 40px; border-radius: var(--radius-sm);
     background: var(--bg4); display: flex; align-items: center; justify-content: center;
@@ -130,19 +145,13 @@
   .card-name { font-size: 14px; font-weight: 500; color: var(--text); }
   .card-meta { font-size: 12px; color: var(--text3); margin-top: 2px; }
   .card-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-  .pill {
-    font-size: 11px; padding: 3px 9px; border-radius: 999px; white-space: nowrap; font-weight: 500;
-  }
+  .pill { font-size: 11px; padding: 3px 9px; border-radius: 999px; white-space: nowrap; font-weight: 500; }
   .pill-none { background: var(--bg4); color: var(--text3); }
   .pill-quick { background: var(--accent-dim); color: var(--accent); }
   .pill-aether { background: var(--green-dim); color: var(--green); }
   .pill-loading { background: var(--amber-dim); color: var(--amber); }
 
-  /* ANALYSIS BODY */
-  .analysis-body {
-    padding: 16px; border-top: 1px solid var(--border);
-    background: var(--bg);
-  }
+  .analysis-body { padding: 16px; border-top: 1px solid var(--border); background: var(--bg); }
   .analysis-tabs { display: flex; gap: 4px; margin-bottom: 14px; }
   .atab {
     padding: 4px 12px; font-size: 12px; border-radius: 999px;
@@ -151,40 +160,16 @@
   }
   .atab.active { background: var(--bg4); color: var(--text); border-color: var(--border2); }
   .analysis-date { font-size: 11px; color: var(--text3); margin-bottom: 10px; font-family: var(--mono); }
-
-  /* SCORE CARDS */
-  .score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-bottom: 14px; }
-  .score-card {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 12px; text-align: center;
-  }
-  .score-val { font-size: 24px; font-weight: 600; color: var(--text); font-family: var(--mono); }
-  .score-label { font-size: 11px; color: var(--text3); margin-top: 3px; }
-
-  /* ANALYSIS TEXT */
   .analysis-text {
     font-size: 13px; color: var(--text2); line-height: 1.7; white-space: pre-wrap;
     background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm);
-    padding: 14px; max-height: 500px; overflow-y: auto;
+    padding: 14px; max-height: 600px; overflow-y: auto;
   }
   .analysis-text::-webkit-scrollbar { width: 4px; }
-  .analysis-text::-webkit-scrollbar-track { background: transparent; }
   .analysis-text::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-
   .analysis-footer { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
 
-  /* SPINNER */
-  .spinner {
-    display: inline-block; width: 12px; height: 12px;
-    border: 2px solid var(--border2); border-top-color: var(--accent);
-    border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 4px;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* LOADING BAR */
-  .loading-bar {
-    height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 12px; overflow: hidden;
-  }
+  .loading-bar { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 12px; overflow: hidden; }
   .loading-bar-fill {
     height: 100%; background: linear-gradient(90deg, var(--accent), var(--green));
     animation: loadbar 1.5s ease-in-out infinite;
@@ -195,7 +180,13 @@
     100% { width: 0%; margin-left: 100%; }
   }
 
-  /* FORM */
+  .spinner {
+    display: inline-block; width: 12px; height: 12px;
+    border: 2px solid var(--border2); border-top-color: var(--accent);
+    border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 4px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
   .add-form {
     background: var(--bg2); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 16px; margin-bottom: 16px; display: none;
@@ -205,23 +196,20 @@
   .form-input {
     flex: 1; min-width: 100px; padding: 8px 12px; font-size: 13px;
     border-radius: var(--radius-sm); border: 1px solid var(--border2);
-    background: var(--bg3); color: var(--text); font-family: var(--font);
-    transition: border-color .15s;
+    background: var(--bg3); color: var(--text); font-family: var(--font); transition: border-color .15s;
   }
   .form-input:focus { outline: none; border-color: var(--accent); }
   .form-input::placeholder { color: var(--text3); }
 
-  /* CONFIG */
   .cfg-card {
     background: var(--bg2); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
   }
   .cfg-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-  .cfg-desc { font-size: 12px; color: var(--text3); margin-bottom: 12px; line-height: 1.5; }
+  .cfg-desc { font-size: 12px; color: var(--text3); margin-bottom: 12px; line-height: 1.6; }
   .cfg-row { display: flex; gap: 8px; }
   .cfg-ok { font-size: 12px; color: var(--green); margin-top: 8px; display: none; }
 
-  /* HISTORY */
   .hist-item { padding: 14px 0; border-bottom: 1px solid var(--border); }
   .hist-item:last-child { border-bottom: none; }
   .hist-meta { font-size: 11px; color: var(--text3); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-family: var(--mono); }
@@ -231,14 +219,12 @@
   .hist-type-quick { background: var(--accent-dim); color: var(--accent); }
   .hist-text { font-size: 13px; color: var(--text2); line-height: 1.6; white-space: pre-wrap; }
 
-  /* EMPTY STATE */
   .empty {
     text-align: center; padding: 48px 24px; color: var(--text3); font-size: 13px;
     border: 1px dashed var(--border); border-radius: var(--radius); margin-bottom: 16px;
   }
   .empty-icon { font-size: 32px; margin-bottom: 12px; opacity: .4; }
 
-  /* ACTION BUTTONS */
   .btn-all {
     width: 100%; padding: 11px; font-size: 13px; border-radius: var(--radius);
     border: 1px solid var(--border2); background: var(--bg2); color: var(--text);
@@ -252,7 +238,6 @@
 
   .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
 
-  /* RESPONSIVE */
   @media (max-width: 700px) {
     .sidebar { display: none; }
     .content { padding: 16px; }
@@ -267,7 +252,7 @@
     <div class="logo-icon"><i class="ti ti-chart-candle"></i></div>
     <div>
       <div class="logo-text">AETHER</div>
-      <div class="logo-sub">Analista de dividendos · 19 puntos</div>
+      <div class="logo-sub">Analista de dividendos · largo plazo</div>
     </div>
   </div>
   <div class="status-pill" id="status-pill">
@@ -293,12 +278,11 @@
 
   <main class="content">
 
-    <!-- CARTERA -->
     <div class="panel active" id="panel-cartera">
       <div class="sec-header">
         <div>
           <div class="sec-title">Cartera de dividendos</div>
-          <div class="sec-sub">Análisis rápido ⚡ o AETHER completo ✦ por empresa</div>
+          <div class="sec-sub">⚡ análisis rápido · ✦ AETHER completo con conclusión ejecutiva</div>
         </div>
         <button class="btn" onclick="toggleAdd()"><i class="ti ti-plus"></i> Añadir</button>
       </div>
@@ -319,7 +303,7 @@
       <div class="empty" id="empty-state">
         <div class="empty-icon">📊</div>
         Añade empresas de dividendos para comenzar.<br>
-        Pulsa <strong>⚡</strong> para análisis rápido o <strong>✦</strong> para análisis AETHER completo de 19 puntos.
+        <strong>⚡</strong> análisis rápido · <strong>✦</strong> AETHER completo con semáforo, yield on cost y conclusión ejecutiva
       </div>
 
       <button class="btn-all" id="btn-quick-all" onclick="runAll('quick')">
@@ -330,7 +314,6 @@
       </button>
     </div>
 
-    <!-- HISTORIAL -->
     <div class="panel" id="panel-historial">
       <div class="sec-header">
         <div>
@@ -342,7 +325,6 @@
       <div id="hist-list"><div class="empty"><div class="empty-icon">🕐</div>Aún no hay análisis guardados.</div></div>
     </div>
 
-    <!-- CONFIG -->
     <div class="panel" id="panel-config">
       <div class="sec-header">
         <div>
@@ -350,12 +332,11 @@
           <div class="sec-sub">API key y opciones del agente</div>
         </div>
       </div>
-
       <div class="cfg-card">
         <div class="cfg-title">API key de Anthropic</div>
         <div class="cfg-desc">
-          Tu clave se guarda únicamente en el almacenamiento local de este navegador.<br>
-          Nadie más puede acceder a ella. Obtenla en <strong>console.anthropic.com → API Keys</strong>.
+          Tu clave se guarda únicamente en el almacenamiento local de este navegador. Nadie más puede acceder a ella.<br>
+          Obtenla en <strong>console.anthropic.com → API Keys</strong>.
         </div>
         <div class="cfg-row">
           <input type="password" class="form-input" id="api-key-cfg" placeholder="sk-ant-api03-..." autocomplete="off">
@@ -363,7 +344,6 @@
         </div>
         <div class="cfg-ok" id="cfg-ok"><i class="ti ti-check"></i> API key guardada correctamente</div>
       </div>
-
       <div class="cfg-card">
         <div class="cfg-title">Datos guardados</div>
         <div class="cfg-desc">Borra el historial de análisis o todos los datos del agente.</div>
@@ -378,7 +358,7 @@
 </div>
 
 <script>
-const SK='aether_companies', HK='aether_history', AK='aether_apikey';
+const SK='aether2_companies', HK='aether2_history', AK='aether2_apikey';
 let companies=[], history=[], apiKey='', running=false;
 
 function load(){
@@ -394,13 +374,8 @@ function saveHist(){ try{localStorage.setItem(HK,JSON.stringify(history.slice(-6
 function updateStatusUI(){
   const pill=document.getElementById('status-pill');
   const txt=document.getElementById('status-text');
-  if(apiKey){
-    pill.className='status-pill on';
-    txt.textContent='Listo';
-  } else {
-    pill.className='status-pill';
-    txt.textContent='Configura tu API key';
-  }
+  if(apiKey){ pill.className='status-pill on'; txt.textContent='Listo'; }
+  else { pill.className='status-pill'; txt.textContent='Configura tu API key'; }
 }
 
 function saveKeyCfg(){
@@ -437,11 +412,19 @@ function cardHTML(c,i){
   const activeTab=c.viewTab||(hasA?'aether':'quick');
   const showBody=hasQ||hasA||loading;
 
+  let semHTML='';
+  if(!loading && hasA && c.aether.semaforo){
+    const s=c.aether.semaforo;
+    const cls=s==='COMPRA'?'sem-verde':s==='ESPERA'?'sem-amarillo':'sem-rojo';
+    const ico=s==='COMPRA'?'🟢':s==='ESPERA'?'🟡':'🔴';
+    semHTML=`<span class="semaforo ${cls}">${ico} ${s}</span>`;
+  }
+
   return `<div class="company-card">
     <div class="card-header">
       <div class="ticker-box">${esc(c.ticker)}</div>
       <div class="card-info">
-        <div class="card-name">${esc(c.name)}</div>
+        <div class="card-name">${esc(c.name)} ${semHTML}</div>
         <div class="card-meta">${esc(c.sector)}</div>
       </div>
       <div class="card-actions">
@@ -457,33 +440,42 @@ function cardHTML(c,i){
         </button>
       </div>
     </div>
-    ${showBody ? `<div class="analysis-body">
-      ${loading ? `<div class="loading-bar"><div class="loading-bar-fill"></div></div><div class="analysis-date">Consultando datos en tiempo real con búsqueda web…</div>` : ''}
-      ${!loading && hasQ && hasA ? `<div class="analysis-tabs">
+    ${showBody?`<div class="analysis-body">
+      ${loading?`<div class="loading-bar"><div class="loading-bar-fill"></div></div>
+        <div class="analysis-date">Consultando datos en tiempo real…</div>`:''}
+      ${!loading&&hasQ&&hasA?`<div class="analysis-tabs">
         <button class="atab ${activeTab==='quick'?'active':''}" onclick="switchATab(${i},'quick')">⚡ Rápido</button>
         <button class="atab ${activeTab==='aether'?'active':''}" onclick="switchATab(${i},'aether')">✦ AETHER completo</button>
-      </div>` : ''}
-      ${!loading && activeTab==='quick' && hasQ ? `
+      </div>`:''}
+      ${!loading&&activeTab==='quick'&&hasQ?`
         <div class="analysis-date">Análisis rápido · ${c.quick.date}</div>
-        <div class="analysis-text">${esc(c.quick.text)}</div>` : ''}
-      ${!loading && activeTab==='aether' && hasA ? `
-        ${c.aether.scores ? `<div class="score-grid">
-          <div class="score-card"><div class="score-val">${esc(c.aether.scores.total||'—')}</div><div class="score-label">Score AETHER</div></div>
-          <div class="score-card"><div class="score-val">${esc(c.aether.scores.calidad||'—')}</div><div class="score-label">Calidad negocio</div></div>
-          <div class="score-card"><div class="score-val">${esc(c.aether.scores.dividendo||'—')}</div><div class="score-label">Dividendo</div></div>
-          <div class="score-card"><div class="score-val">${esc(c.aether.scores.valoracion||'—')}</div><div class="score-label">Valoración</div></div>
-        </div>` : ''}
+        <div class="analysis-text">${esc(c.quick.text)}</div>`:''}
+      ${!loading&&activeTab==='aether'&&hasA?`
+        ${c.aether.exec?`<div class="exec-summary">
+          <div class="exec-header">
+            <span class="exec-label">Conclusión ejecutiva</span>
+            ${c.aether.semaforo?`<span class="semaforo ${c.aether.semaforo==='COMPRA'?'sem-verde':c.aether.semaforo==='ESPERA'?'sem-amarillo':'sem-rojo'}">${c.aether.semaforo==='COMPRA'?'🟢':c.aether.semaforo==='ESPERA'?'🟡':'🔴'} ${esc(c.aether.semaforo)}</span>`:''}
+          </div>
+          <div class="exec-text">${esc(c.aether.exec)}</div>
+        </div>`:''}
+        ${c.aether.yoc?`<div class="yoc-grid">
+          <div class="yoc-card"><div class="yoc-val accent">${esc(c.aether.yoc.actual||'—')}</div><div class="yoc-label">Yield actual</div></div>
+          <div class="yoc-card"><div class="yoc-val green">${esc(c.aether.yoc.yoc5||'—')}</div><div class="yoc-label">Yield on cost 5 años</div></div>
+          <div class="yoc-card"><div class="yoc-val green">${esc(c.aether.yoc.yoc10||'—')}</div><div class="yoc-label">Yield on cost 10 años</div></div>
+          <div class="yoc-card"><div class="yoc-val amber">${esc(c.aether.yoc.crecimiento||'—')}</div><div class="yoc-label">Crecimiento dividendo</div></div>
+          <div class="yoc-card"><div class="yoc-val accent">${esc(c.aether.yoc.score||'—')}</div><div class="yoc-label">Score AETHER</div></div>
+        </div>`:''}
         <div class="analysis-date">Análisis AETHER · ${c.aether.date}</div>
-        <div class="analysis-text">${esc(c.aether.text)}</div>` : ''}
-      ${!loading && (hasQ||hasA) ? `<div class="analysis-footer">
+        <div class="analysis-text">${esc(c.aether.text)}</div>`:''}
+      ${!loading&&(hasQ||hasA)?`<div class="analysis-footer">
         <button class="btn" onclick="runOne(${i},'quick')" ${!apiKey?'disabled':''}><i class="ti ti-bolt"></i> Actualizar rápido</button>
         <button class="btn btn-green" onclick="runOne(${i},'aether')" ${!apiKey?'disabled':''}><i class="ti ti-sparkles"></i> Actualizar AETHER</button>
-      </div>` : ''}
-    </div>` : ''}
+      </div>`:''}
+    </div>`:''}
   </div>`;
 }
 
-function switchATab(i, tab){ companies[i].viewTab=tab; renderCompanies(); }
+function switchATab(i,tab){ companies[i].viewTab=tab; renderCompanies(); }
 
 function toggleAdd(){
   const f=document.getElementById('add-form');
@@ -505,90 +497,104 @@ function addCompany(){
 function removeCompany(i){ companies.splice(i,1); save(); renderCompanies(); }
 
 function buildQuickPrompt(c){
-  return `Eres un analista financiero experto en inversión por dividendos. Analiza ${c.name} (${c.ticker}, sector: ${c.sector}) con datos actualizados a hoy usando búsqueda web.
-Responde en español, texto plano sin markdown ni asteriscos, máximo 180 palabras:
-1) Situación actual y dividendo (yield actual, último pago, frecuencia, años consecutivos)
-2) Sostenibilidad (payout ratio sobre beneficio y FCF, cobertura)
-3) Fortalezas y riesgos principales para el dividendo
-4) Veredicto para inversor de dividendos de largo plazo`;
+  return `Eres un analista financiero experto en inversión por dividendos a largo plazo. Analiza ${c.name} (${c.ticker}, sector: ${c.sector}) con datos actualizados usando búsqueda web.
+
+Responde en español, texto plano sin markdown, máximo 200 palabras:
+
+SEMAFORO: [escribe exactamente COMPRA, ESPERA o DESCARTA según tu veredicto]
+
+1) Dividendo actual: yield, DPA, frecuencia, años consecutivos de pago/crecimiento
+2) Sostenibilidad: payout ratio sobre beneficio y FCF, cobertura real
+3) Yield on cost estimado a 5 años si el dividendo crece a la tasa histórica
+4) Fortaleza y riesgo principal para el dividendo
+5) Veredicto en 2 líneas para inversor de largo plazo`;
 }
 
 function buildAETHERPrompt(c){
-  return `Eres AETHER, el mejor analista financiero especializado en inversión por dividendos de largo plazo. Analiza exhaustivamente ${c.name} (ticker: ${c.ticker}, sector: ${c.sector}) usando búsqueda web para obtener datos actualizados a hoy.
+  return `Eres AETHER, analista financiero de élite especializado en inversión por dividendos a largo plazo. Tu cliente es conservador, busca rentas crecientes y horizonte de 10+ años. Analiza ${c.name} (ticker: ${c.ticker}, sector: ${c.sector}) con búsqueda web para datos actualizados a hoy.
 
-Responde en español. Sé directo, usa datos reales. Formato: encabeza cada punto como "PUNTO X — TÍTULO" y escribe el análisis debajo. Sin markdown, sin asteriscos, texto plano con saltos de línea.
+Responde en español. Texto plano, sin markdown, sin asteriscos. Encabeza cada sección como "PUNTO X — TÍTULO".
+
+Primero incluye estas líneas de metadatos (una por línea, sin espacios extra):
+SEMAFORO:[COMPRA|ESPERA|DESCARTA]
+EXEC:[conclusión ejecutiva de exactamente 4-5 líneas: qué es, por qué comprar/esperar/descartar, a qué precio entrar y cuál es el mayor riesgo]
+YOC_ACTUAL:[yield actual en %]
+YOC_5:[yield on cost estimado a 5 años en %]
+YOC_10:[yield on cost estimado a 10 años en %]
+YOC_CREC:[tasa de crecimiento anual del dividendo usada, en %]
+SCORE:[X/60]
+
+Luego desarrolla los puntos:
 
 PUNTO 1 — CALIDAD DEL NEGOCIO
-Modelo de negocio, posición en el sector, predictibilidad de ingresos, barreras de entrada.
+Modelo de negocio, posición sectorial, predictibilidad de ingresos, barreras de entrada. ¿Es un negocio que puede pagar dividendo creciente en recesión?
 
 PUNTO 2 — VENTAJAS COMPETITIVAS (MOAT)
-Tipo de moat (marca, red, coste, switching cost, activo intangible), solidez y durabilidad estimada en años.
+Tipo de moat, solidez y durabilidad estimada. ¿Protege el dividendo a 10 años?
 
 PUNTO 3 — SOLIDEZ FINANCIERA
-Deuda neta/EBITDA, interest coverage ratio, rating crediticio actual, tendencia de deuda últimos 3 años.
+Deuda neta/EBITDA, interest coverage, rating crediticio, tendencia últimos 3 años. ¿La deuda amenaza el dividendo?
 
-PUNTO 4 — DIVIDENDOS Y SOSTENIBILIDAD
-Yield actual, DPA último año, política de dividendo, años consecutivos de pago y/o crecimiento (Dividend Aristocrat/King si aplica).
+PUNTO 4 — DIVIDENDO: HISTORIAL Y POLÍTICA
+Yield actual, DPA, frecuencia, años consecutivos de pago y crecimiento. ¿Dividend Aristocrat o King? Política oficial de dividendo de la empresa.
 
 PUNTO 5 — COBERTURA REAL POR FCF
-FCF últimos 12 meses, FCF por acción, dividendo por acción, FCF payout ratio. ¿Sobra caja tras el dividendo?
+FCF últimos 12 meses, FCF por acción vs DPA. FCF payout ratio. ¿Sobra caja tras el dividendo para crecer o reducir deuda?
 
-PUNTO 6 — ENTORNO MACRO Y REGULATORIO
-Sensibilidad a tipos de interés, riesgos regulatorios, exposición geopolítica relevante para el dividendo.
+PUNTO 6 — YIELD ON COST Y POTENCIA DEL DIVIDENDO CRECIENTE
+Calcula el yield on cost a 5 y 10 años usando la tasa de crecimiento histórica del dividendo. Explica por qué el crecimiento del dividendo importa más que el yield inicial para el inversor de largo plazo.
 
-PUNTO 7 — VALORACIÓN POR PER
-PER actual vs media histórica 5 y 10 años vs sector. Conclusión: ¿cara, justa o barata?
+PUNTO 7 — DIVIDEND DISCOUNT MODEL (GORDON GROWTH)
+Calcula el valor intrínseco usando DDM simplificado: V = D1 / (Ke - g). Usa Ke razonable para el sector y g = tasa de crecimiento sostenible. ¿Está el precio actual por encima o debajo del valor intrínseco?
 
 PUNTO 8 — VALORACIÓN POR YIELD HISTÓRICO
-Yield actual vs yield histórico medio 5 y 10 años. Si yield actual > media histórica: señal de infravaloración. Cuantifica la diferencia.
+Yield actual vs yield histórico medio 5 y 10 años. Si yield actual > media histórica: señal de infravaloración. Cuantifica la diferencia y la señal.
 
-PUNTO 9 — VALORACIÓN POR FCF YIELD
-FCF yield actual (FCF/Capitalización). ¿Es atractivo para sostener y crecer el dividendo?
+PUNTO 9 — VALORACIÓN POR PER Y FCF YIELD
+PER actual vs histórico y sector. FCF yield actual. ¿Cara, justa o barata por múltiplos?
 
-PUNTO 10 — IMPACTO DE LA IA
-¿La IA es amenaza disruptiva, oportunidad de eficiencia o irrelevante para este negocio? Impacto esperado en márgenes y posición competitiva.
+PUNTO 10 — SOLIDEZ DEL DIVIDENDO EN CRISIS HISTÓRICAS
+¿Qué pasó con el dividendo en 2008-2009, 2020 y el ciclo de subida de tipos 2022-2023? ¿Se mantuvo, creció o se recortó? Este historial bajo presión real vale más que cualquier modelo.
 
-PUNTO 11 — ROIC HISTÓRICO Y CREACIÓN DE VALOR
-ROIC medio últimos 5 años. WACC estimado. ¿ROIC > WACC? ¿Crea o destruye valor para el accionista?
+PUNTO 11 — STRESS TEST DEL DIVIDENDO
+¿Qué caída de ingresos o FCF pondría en riesgo el dividendo hoy? Calcula el umbral de seguridad. ¿Cuánto margen hay?
 
-PUNTO 12 — CALIDAD DIRECTIVA Y ASIGNACIÓN DE CAPITAL
-Track record del CEO/equipo directivo. Prioridades demostradas: dividendo, recompras, reducción deuda, M&A. ¿Alineados con el accionista?
+PUNTO 12 — ENTORNO MACRO Y TIPOS DE INTERÉS
+Sensibilidad histórica del precio a subidas de tipos. ¿Qué yield necesita ofrecer para competir con el bono a 10 años actual? Riesgos regulatorios y geopolíticos relevantes.
 
-PUNTO 13 — ESCENARIOS PROBABILÍSTICOS A 3 AÑOS
-Escenario optimista (prob. 25%): precio objetivo y rentabilidad total.
-Escenario base (prob. 55%): precio objetivo y rentabilidad total.
-Escenario pesimista (prob. 20%): precio objetivo y rentabilidad total.
-Rentabilidad esperada ponderada.
+PUNTO 13 — COMPETIDORES DEL DIVIDENDO EN EL SECTOR
+¿Hay alternativas en el mismo sector con mejor yield, mayor crecimiento del dividendo o mejor cobertura FCF? Nombra 2-3 competidores y compara brevemente.
 
-PUNTO 14 — STRESS TEST DEL DIVIDENDO
-¿Qué caída de ingresos o FCF pondría en riesgo el dividendo? Umbral de seguridad. ¿Ha habido recortes históricos? ¿En qué circunstancias?
+PUNTO 14 — ROIC Y CREACIÓN DE VALOR
+ROIC medio 5 años vs WACC estimado. ¿Crea o destruye valor? Una empresa que destruye valor no puede crecer el dividendo indefinidamente.
 
-PUNTO 15 — RIESGO DE DISRUPCIÓN TECNOLÓGICA
-Probabilidad de disrupción en 5-10 años (baja/media/alta). ¿El moat protege suficientemente? Ejemplos de competidores disruptivos si los hay.
+PUNTO 15 — CALIDAD DIRECTIVA Y ASIGNACIÓN DE CAPITAL
+Track record demostrado: ¿priorizan el dividendo bajo presión? ¿Han recortado recompras para protegerlo? ¿M&A destructivo o creador de valor?
 
-PUNTO 16 — RENTABILIDAD ESPERADA A 5 Y 10 AÑOS
-Desglose anualizado: yield actual + crecimiento esperado del dividendo + cambio de múltiplo. TIR total estimada a 5 y 10 años.
+PUNTO 16 — RIESGO DE DISRUPCIÓN Y RELEVANCIA A 10 AÑOS
+Probabilidad de disrupción en 5-10 años. ¿El moat aguanta? Impacto de la IA: ¿amenaza, eficiencia o irrelevante para este negocio concreto?
 
-PUNTO 17 — RANGOS DE ENTRADA
-Precio óptimo de compra (yield > media histórica + margen seguridad).
-Precio razonable (yield en línea con media histórica).
-Precio caro (yield por debajo de media histórica, sobrecompra).
-Justifica cada rango con datos.
+PUNTO 17 — ESCENARIOS A 3 AÑOS (ENFOCADOS EN EL DIVIDENDO)
+Para cada escenario indica qué pasa CON EL DIVIDENDO, no solo con el precio:
+Optimista (25%): dividendo proyectado y rentabilidad total.
+Base (55%): dividendo proyectado y rentabilidad total.
+Pesimista (20%): ¿se mantiene el dividendo? ¿Recorte posible?
+Rentabilidad total esperada ponderada.
 
-PUNTO 18 — SCORING AETHER FINAL
-Puntúa cada dimensión de 0 a 10:
-- Calidad del negocio
-- Moat
-- Solidez financiera
-- Dividendo y sostenibilidad
-- Valoración actual
-- Calidad directiva
-Total sobre 60.
-Incluye esta línea exacta al final del punto 18:
-SCORING:calidad=X,moat=X,solidez=X,dividendo=X,valoracion=X,gestion=X,total=XX/60
+PUNTO 18 — RENTABILIDAD ESPERADA A 5 Y 10 AÑOS
+Desglose anualizado: yield actual + crecimiento del dividendo + cambio de múltiplo. TIR total estimada. Compara con el bono a 10 años actual como referencia.
 
-PUNTO 19 — FECHA Y VIGENCIA
-Fecha exacta de hoy. Nota sobre vigencia del análisis y qué eventos podrían invalidarlo antes de la próxima revisión.`;
+PUNTO 19 — RANGOS DE ENTRADA
+Precio óptimo: yield > media histórica + margen de seguridad del 10%.
+Precio razonable: yield en línea con media histórica.
+Precio caro: yield por debajo de media histórica. Precio actual y conclusión de momento de entrada.
+
+PUNTO 20 — SCORING AETHER FINAL (sobre 60)
+Calidad negocio /10, Moat /10, Solidez financiera /10, Dividendo y sostenibilidad /10, Valoración /10, Calidad directiva /10.
+Total: XX/60. Incluye una frase de veredicto final.
+
+PUNTO 21 — FECHA Y VIGENCIA
+Fecha de hoy. Qué eventos concretos invalidarían este análisis antes de la próxima revisión anual.`;
 }
 
 async function callAPI(prompt){
@@ -602,7 +608,7 @@ async function callAPI(prompt){
     },
     body:JSON.stringify({
       model:'claude-sonnet-4-6',
-      max_tokens:4000,
+      max_tokens:5000,
       tools:[{type:'web_search_20250305',name:'web_search'}],
       messages:[{role:'user',content:prompt}]
     })
@@ -615,12 +621,34 @@ async function callAPI(prompt){
   return data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n').trim();
 }
 
-function parseScores(text){
-  const m=text.match(/SCORING:([^\n]+)/);
-  if(!m) return null;
-  const s={};
-  m[1].split(',').forEach(p=>{ const [k,v]=p.split('='); if(k&&v) s[k.trim()]=v.trim(); });
-  return s;
+function parseMeta(text){
+  const get=(key)=>{
+    const m=text.match(new RegExp(key+':\\[?([^\\]\\n]+)\\]?'));
+    return m?m[1].trim():null;
+  };
+  return {
+    semaforo: get('SEMAFORO'),
+    exec: get('EXEC'),
+    yoc:{ actual:get('YOC_ACTUAL'), yoc5:get('YOC_5'), yoc10:get('YOC_10'), crecimiento:get('YOC_CREC') },
+    score: get('SCORE')
+  };
+}
+
+function cleanText(text){
+  return text
+    .replace(/SEMAFORO:\[?[^\]\n]+\]?/g,'')
+    .replace(/EXEC:\[?[^\]\n]+\]?/g,'')
+    .replace(/YOC_ACTUAL:\[?[^\]\n]+\]?/g,'')
+    .replace(/YOC_5:\[?[^\]\n]+\]?/g,'')
+    .replace(/YOC_10:\[?[^\]\n]+\]?/g,'')
+    .replace(/YOC_CREC:\[?[^\]\n]+\]?/g,'')
+    .replace(/SCORE:\[?[^\]\n]+\]?/g,'')
+    .replace(/\n{3,}/g,'\n\n').trim();
+}
+
+function parseQuickSemaforo(text){
+  const m=text.match(/SEMAFORO:\s*([A-ZÁÉÍÓÚ]+)/i);
+  return m?m[1].toUpperCase().trim():null;
 }
 
 async function runOne(i, type){
@@ -631,21 +659,29 @@ async function runOne(i, type){
   renderCompanies();
   const prompt=type==='aether'?buildAETHERPrompt(companies[i]):buildQuickPrompt(companies[i]);
   try{
-    const text=await callAPI(prompt);
+    const raw=await callAPI(prompt);
     const date=nowStr();
     if(type==='aether'){
-      const scores=parseScores(text);
-      const cleanText=text.replace(/SCORING:[^\n]+/,'').trim();
-      companies[i].aether={text:cleanText,date,scores};
+      const meta=parseMeta(raw);
+      const clean=cleanText(raw);
+      companies[i].aether={
+        text: clean,
+        date,
+        semaforo: meta.semaforo,
+        exec: meta.exec,
+        yoc: meta.yoc ? { ...meta.yoc, score: meta.score } : null
+      };
     } else {
-      companies[i].quick={text,date};
+      const sem=parseQuickSemaforo(raw);
+      const cleanQ=raw.replace(/SEMAFORO:\s*[A-ZÁÉÍÓÚ]+/i,'').trim();
+      companies[i].quick={ text:cleanQ, date, semaforo:sem };
     }
     logHistory(companies[i].ticker, companies[i].name, type,
       type==='aether'?companies[i].aether.text:companies[i].quick.text);
   } catch(e){
     const errText=`Error: ${e.message}`;
-    if(type==='aether') companies[i].aether={text:errText,date:nowStr(),scores:null};
-    else companies[i].quick={text:errText,date:nowStr()};
+    if(type==='aether') companies[i].aether={text:errText,date:nowStr(),semaforo:null,exec:null,yoc:null};
+    else companies[i].quick={text:errText,date:nowStr(),semaforo:null};
   }
   companies[i].loading=false;
   save(); renderCompanies();
@@ -691,22 +727,22 @@ function renderHistory(){
     </div>`).join('');
 }
 
-function switchPanel(name, btn){
+function switchPanel(name,btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   document.getElementById('panel-'+name).classList.add('active');
   btn.classList.add('active');
 }
 
-async function clearHistory(){
-  if(!confirm('¿Borrar todo el historial de análisis?')) return;
+function clearHistory(){
+  if(!confirm('¿Borrar todo el historial?')) return;
   history=[];
   try{localStorage.removeItem(HK);}catch(e){}
   renderHistory();
 }
 
-async function clearAll(){
-  if(!confirm('¿Borrar TODOS los datos del agente? Esta acción no se puede deshacer.')) return;
+function clearAll(){
+  if(!confirm('¿Borrar TODOS los datos? No se puede deshacer.')) return;
   companies=[];history=[];apiKey='';
   try{localStorage.removeItem(SK);localStorage.removeItem(HK);localStorage.removeItem(AK);}catch(e){}
   renderCompanies();renderHistory();updateStatusUI();
