@@ -6,347 +6,270 @@
 <title>AETHER — Analista de Dividendos</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-
   :root {
-    --bg: #0d0f12;
-    --bg2: #13161b;
-    --bg3: #1a1e25;
-    --bg4: #21262f;
-    --border: #2a2f3a;
-    --border2: #353c49;
-    --text: #e8eaf0;
-    --text2: #8b93a8;
-    --text3: #5a6275;
-    --accent: #4f9cf0;
-    --accent-dim: rgba(79,156,240,0.12);
-    --green: #3ecf8e;
-    --green-dim: rgba(62,207,142,0.12);
-    --amber: #f5a623;
-    --amber-dim: rgba(245,166,35,0.12);
-    --red: #f06449;
-    --red-dim: rgba(240,100,73,0.12);
-    --radius: 10px;
-    --radius-sm: 6px;
-    --font: 'Inter', sans-serif;
-    --mono: 'JetBrains Mono', monospace;
+    --bg:#0d0f12;--bg2:#13161b;--bg3:#1a1e25;--bg4:#21262f;
+    --border:#2a2f3a;--border2:#353c49;
+    --text:#e8eaf0;--text2:#8b93a8;--text3:#5a6275;
+    --accent:#4f9cf0;--accent-dim:rgba(79,156,240,0.12);
+    --green:#3ecf8e;--green-dim:rgba(62,207,142,0.12);
+    --amber:#f5a623;--amber-dim:rgba(245,166,35,0.12);
+    --red:#f06449;--red-dim:rgba(240,100,73,0.12);
+    --purple:#a78bfa;--purple-dim:rgba(167,139,250,0.12);
+    --radius:10px;--radius-sm:6px;
+    --font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
   }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--bg);color:var(--text);font-family:var(--font)}
+  body{min-height:100vh;display:flex;flex-direction:column}
+  .top-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo-icon{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,#1a3a6e,#2a5cbf);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--accent)}
+  .logo-text{font-size:16px;font-weight:600;letter-spacing:-.02em;color:var(--text)}
+  .logo-sub{font-size:11px;color:var(--text3);margin-top:1px}
+  .status-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:500;background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,166,35,0.2);transition:all .3s}
+  .status-pill.on{background:var(--green-dim);color:var(--green);border-color:rgba(62,207,142,0.2)}
+  .status-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+  .main{display:flex;flex:1}
+  .sidebar{width:240px;flex-shrink:0;border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:4px;background:var(--bg);position:sticky;top:57px;height:calc(100vh - 57px);overflow-y:auto}
+  .content{flex:1;padding:24px;max-width:980px}
+  .nav-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;padding:8px 8px 4px}
+  .nav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius-sm);font-size:13px;color:var(--text2);cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:var(--font);transition:background .15s,color .15s}
+  .nav-item:hover{background:var(--bg3);color:var(--text)}
+  .nav-item.active{background:var(--accent-dim);color:var(--accent)}
+  .panel{display:none}.panel.active{display:block}
+  .sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+  .sec-title{font-size:18px;font-weight:600;color:var(--text);letter-spacing:-.02em}
+  .sec-sub{font-size:13px;color:var(--text3);margin-top:3px}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;font-size:13px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg3);color:var(--text);cursor:pointer;font-family:var(--font);transition:background .15s;font-weight:400}
+  .btn:hover:not(:disabled){background:var(--bg4)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn-primary{background:var(--accent-dim);border-color:rgba(79,156,240,0.3);color:var(--accent)}
+  .btn-primary:hover:not(:disabled){background:rgba(79,156,240,0.2)}
+  .btn-green{background:var(--green-dim);border-color:rgba(62,207,142,0.3);color:var(--green)}
+  .btn-green:hover:not(:disabled){background:rgba(62,207,142,0.2)}
+  .btn-icon{width:30px;height:30px;padding:0;justify-content:center;flex-shrink:0}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { background: var(--bg); color: var(--text); font-family: var(--font); }
-  body { min-height: 100vh; display: flex; flex-direction: column; }
+  /* DASHBOARD */
+  .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+  .dash-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+  .dash-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+  .dash-val{font-size:26px;font-weight:600;font-family:var(--mono);color:var(--text)}
+  .dash-val.green{color:var(--green)}
+  .dash-val.accent{color:var(--accent)}
+  .dash-val.amber{color:var(--amber)}
+  .dash-val.purple{color:var(--purple)}
+  .dash-sub{font-size:12px;color:var(--text3);margin-top:4px}
+  .dash-section{margin-bottom:24px}
+  .dash-section-title{font-size:13px;font-weight:500;color:var(--text2);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+  .positions-table{width:100%;border-collapse:collapse}
+  .positions-table th{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);font-weight:500}
+  .positions-table td{font-size:13px;color:var(--text2);padding:10px 12px;border-bottom:1px solid var(--border);font-family:var(--mono)}
+  .positions-table td.name{font-family:var(--font);color:var(--text)}
+  .positions-table tr:last-child td{border-bottom:none}
+  .positions-table tr:hover td{background:var(--bg3)}
+  .pos-gain{color:var(--green)}
+  .pos-loss{color:var(--red)}
+  .sem-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+  .sem-dot.verde{background:var(--green)}
+  .sem-dot.amarillo{background:var(--amber)}
+  .sem-dot.rojo{background:var(--red)}
+  .sem-dot.none{background:var(--text3)}
 
-  .top-bar {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 16px 24px; border-bottom: 1px solid var(--border);
-    background: var(--bg); position: sticky; top: 0; z-index: 100;
-  }
-  .logo { display: flex; align-items: center; gap: 10px; }
-  .logo-icon {
-    width: 34px; height: 34px; border-radius: 8px;
-    background: linear-gradient(135deg, #1a3a6e, #2a5cbf);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; color: var(--accent);
-  }
-  .logo-text { font-size: 16px; font-weight: 600; letter-spacing: -0.02em; color: var(--text); }
-  .logo-sub { font-size: 11px; color: var(--text3); font-weight: 400; margin-top: 1px; }
-  .status-pill {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 4px 12px; border-radius: 999px; font-size: 11px; font-weight: 500;
-    background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,166,35,0.2);
-    transition: all .3s;
-  }
-  .status-pill.on { background: var(--green-dim); color: var(--green); border-color: rgba(62,207,142,0.2); }
-  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  /* SEMAFORO */
+  .semaforo{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600}
+  .sem-verde{background:var(--green-dim);color:var(--green);border:1px solid rgba(62,207,142,0.3)}
+  .sem-amarillo{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,166,35,0.3)}
+  .sem-rojo{background:var(--red-dim);color:var(--red);border:1px solid rgba(240,100,73,0.3)}
 
-  .main { display: flex; flex: 1; }
-  .sidebar {
-    width: 260px; flex-shrink: 0; border-right: 1px solid var(--border);
-    padding: 20px 16px; display: flex; flex-direction: column; gap: 6px;
-    background: var(--bg); position: sticky; top: 57px; height: calc(100vh - 57px); overflow-y: auto;
-  }
-  .content { flex: 1; padding: 24px; max-width: 920px; }
+  /* EXEC */
+  .exec-summary{background:linear-gradient(135deg,rgba(79,156,240,0.08),rgba(62,207,142,0.06));border:1px solid rgba(79,156,240,0.2);border-radius:var(--radius);padding:16px;margin-bottom:14px}
+  .exec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+  .exec-label{font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.08em}
+  .exec-text{font-size:13px;color:var(--text);line-height:1.65;white-space:pre-wrap}
 
-  .nav-label { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; padding: 8px 8px 4px; }
-  .nav-item {
-    display: flex; align-items: center; gap: 8px; padding: 8px 10px;
-    border-radius: var(--radius-sm); font-size: 13px; color: var(--text2);
-    cursor: pointer; border: none; background: none; width: 100%; text-align: left; font-family: var(--font);
-    transition: background .15s, color .15s;
-  }
-  .nav-item:hover { background: var(--bg3); color: var(--text); }
-  .nav-item.active { background: var(--accent-dim); color: var(--accent); }
+  /* YOC */
+  .yoc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:14px}
+  .yoc-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;text-align:center}
+  .yoc-val{font-size:20px;font-weight:600;font-family:var(--mono)}
+  .yoc-val.green{color:var(--green)}.yoc-val.accent{color:var(--accent)}.yoc-val.amber{color:var(--amber)}.yoc-val.purple{color:var(--purple)}
+  .yoc-label{font-size:11px;color:var(--text3);margin-top:3px}
 
-  .panel { display: none; }
-  .panel.active { display: block; }
+  /* POSITION MINI */
+  .pos-mini{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:12px;display:flex;gap:20px;flex-wrap:wrap}
+  .pos-mini-item{text-align:center}
+  .pos-mini-val{font-size:14px;font-weight:600;font-family:var(--mono);color:var(--text)}
+  .pos-mini-val.green{color:var(--green)}.pos-mini-val.red{color:var(--red)}.pos-mini-val.purple{color:var(--purple)}
+  .pos-mini-label{font-size:10px;color:var(--text3);margin-top:2px}
 
-  .sec-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-  .sec-title { font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; }
-  .sec-sub { font-size: 13px; color: var(--text3); margin-top: 3px; }
+  /* COMPANY CARDS */
+  .company-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;transition:border-color .2s}
+  .company-card:hover{border-color:var(--border2)}
+  .card-header{display:flex;align-items:center;gap:12px;padding:14px 16px}
+  .ticker-box{width:50px;height:40px;border-radius:var(--radius-sm);background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--accent);font-family:var(--mono);flex-shrink:0;letter-spacing:.02em}
+  .card-info{flex:1;min-width:0}
+  .card-name{font-size:14px;font-weight:500;color:var(--text)}
+  .card-meta{font-size:12px;color:var(--text3);margin-top:2px}
+  .card-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .pill{font-size:11px;padding:3px 9px;border-radius:999px;white-space:nowrap;font-weight:500}
+  .pill-none{background:var(--bg4);color:var(--text3)}
+  .pill-quick{background:var(--accent-dim);color:var(--accent)}
+  .pill-aether{background:var(--green-dim);color:var(--green)}
+  .pill-loading{background:var(--amber-dim);color:var(--amber)}
+  .analysis-body{padding:16px;border-top:1px solid var(--border);background:var(--bg)}
+  .analysis-tabs{display:flex;gap:4px;margin-bottom:14px}
+  .atab{padding:4px 12px;font-size:12px;border-radius:999px;border:1px solid var(--border);background:var(--bg2);color:var(--text3);cursor:pointer;font-family:var(--font);transition:all .15s}
+  .atab.active{background:var(--bg4);color:var(--text);border-color:var(--border2)}
+  .analysis-date{font-size:11px;color:var(--text3);margin-bottom:10px;font-family:var(--mono)}
+  .analysis-text{font-size:13px;color:var(--text2);line-height:1.7;white-space:pre-wrap;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;max-height:600px;overflow-y:auto}
+  .analysis-text::-webkit-scrollbar{width:4px}
+  .analysis-text::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+  .analysis-footer{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .progress-wrap{margin-bottom:12px}
+  .progress-label{font-size:12px;color:var(--amber);margin-bottom:6px;font-family:var(--mono)}
+  .progress-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));transition:width .5s ease;border-radius:2px}
 
-  .btn {
-    display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px;
-    font-size: 13px; border-radius: var(--radius-sm); border: 1px solid var(--border2);
-    background: var(--bg3); color: var(--text); cursor: pointer; font-family: var(--font);
-    transition: background .15s; font-weight: 400;
-  }
-  .btn:hover:not(:disabled) { background: var(--bg4); }
-  .btn:disabled { opacity: .4; cursor: not-allowed; }
-  .btn-primary { background: var(--accent-dim); border-color: rgba(79,156,240,0.3); color: var(--accent); }
-  .btn-primary:hover:not(:disabled) { background: rgba(79,156,240,0.2); }
-  .btn-green { background: var(--green-dim); border-color: rgba(62,207,142,0.3); color: var(--green); }
-  .btn-green:hover:not(:disabled) { background: rgba(62,207,142,0.2); }
-  .btn-icon { width: 30px; height: 30px; padding: 0; justify-content: center; flex-shrink: 0; }
+  /* ADD FORM */
+  .add-form{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;display:none}
+  .add-form.open{display:block}
+  .form-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+  .form-input{flex:1;min-width:90px;padding:8px 12px;font-size:13px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-family:var(--font);transition:border-color .15s}
+  .form-input:focus{outline:none;border-color:var(--accent)}
+  .form-input::placeholder{color:var(--text3)}
+  .form-label{font-size:11px;color:var(--text3);margin-bottom:4px;display:block}
+  .form-group{flex:1;min-width:90px;display:flex;flex-direction:column}
+  .form-section{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin:10px 0 8px;padding-top:10px;border-top:1px solid var(--border)}
 
-  /* SEMÁFORO */
-  .semaforo {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 600;
-  }
-  .sem-verde { background: var(--green-dim); color: var(--green); border: 1px solid rgba(62,207,142,0.3); }
-  .sem-amarillo { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,166,35,0.3); }
-  .sem-rojo { background: var(--red-dim); color: var(--red); border: 1px solid rgba(240,100,73,0.3); }
+  /* CONFIG */
+  .cfg-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+  .cfg-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px}
+  .cfg-desc{font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.6}
+  .cfg-row{display:flex;gap:8px}
+  .cfg-ok{font-size:12px;color:var(--green);margin-top:8px;display:none}
 
-  /* EXECUTIVE SUMMARY */
-  .exec-summary {
-    background: linear-gradient(135deg, rgba(79,156,240,0.08), rgba(62,207,142,0.06));
-    border: 1px solid rgba(79,156,240,0.2);
-    border-radius: var(--radius); padding: 16px; margin-bottom: 14px;
-  }
-  .exec-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
-  .exec-label { font-size: 10px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .08em; }
-  .exec-text { font-size: 13px; color: var(--text); line-height: 1.65; white-space: pre-wrap; }
+  /* HISTORY */
+  .hist-item{padding:14px 0;border-bottom:1px solid var(--border)}
+  .hist-item:last-child{border-bottom:none}
+  .hist-meta{font-size:11px;color:var(--text3);margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--mono)}
+  .hist-tk{color:var(--accent);font-weight:500}
+  .hist-type-pill{padding:2px 7px;border-radius:999px;font-size:10px;font-weight:500}
+  .hist-type-aether{background:var(--green-dim);color:var(--green)}
+  .hist-type-quick{background:var(--accent-dim);color:var(--accent)}
+  .hist-text{font-size:13px;color:var(--text2);line-height:1.6;white-space:pre-wrap}
 
-  /* YIELD ON COST */
-  .yoc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 8px; margin-bottom: 14px; }
-  .yoc-card {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 12px; text-align: center;
-  }
-  .yoc-val { font-size: 22px; font-weight: 600; font-family: var(--mono); }
-  .yoc-val.green { color: var(--green); }
-  .yoc-val.accent { color: var(--accent); }
-  .yoc-val.amber { color: var(--amber); }
-  .yoc-label { font-size: 11px; color: var(--text3); margin-top: 3px; }
-
-  .company-card {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;
-    transition: border-color .2s;
-  }
-  .company-card:hover { border-color: var(--border2); }
-  .card-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
-  .ticker-box {
-    width: 50px; height: 40px; border-radius: var(--radius-sm);
-    background: var(--bg4); display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 600; color: var(--accent); font-family: var(--mono);
-    flex-shrink: 0; letter-spacing: .02em;
-  }
-  .card-info { flex: 1; min-width: 0; }
-  .card-name { font-size: 14px; font-weight: 500; color: var(--text); }
-  .card-meta { font-size: 12px; color: var(--text3); margin-top: 2px; }
-  .card-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-  .pill { font-size: 11px; padding: 3px 9px; border-radius: 999px; white-space: nowrap; font-weight: 500; }
-  .pill-none { background: var(--bg4); color: var(--text3); }
-  .pill-quick { background: var(--accent-dim); color: var(--accent); }
-  .pill-aether { background: var(--green-dim); color: var(--green); }
-  .pill-loading { background: var(--amber-dim); color: var(--amber); }
-
-  .analysis-body { padding: 16px; border-top: 1px solid var(--border); background: var(--bg); }
-  .analysis-tabs { display: flex; gap: 4px; margin-bottom: 14px; }
-  .atab {
-    padding: 4px 12px; font-size: 12px; border-radius: 999px;
-    border: 1px solid var(--border); background: var(--bg2); color: var(--text3);
-    cursor: pointer; font-family: var(--font); transition: all .15s;
-  }
-  .atab.active { background: var(--bg4); color: var(--text); border-color: var(--border2); }
-  .analysis-date { font-size: 11px; color: var(--text3); margin-bottom: 10px; font-family: var(--mono); }
-  .analysis-text {
-    font-size: 13px; color: var(--text2); line-height: 1.7; white-space: pre-wrap;
-    background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm);
-    padding: 14px; max-height: 600px; overflow-y: auto;
-  }
-  .analysis-text::-webkit-scrollbar { width: 4px; }
-  .analysis-text::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-  .analysis-footer { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-
-  .loading-bar { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 12px; overflow: hidden; }
-  .loading-bar-fill {
-    height: 100%; background: linear-gradient(90deg, var(--accent), var(--green));
-    animation: loadbar 1.5s ease-in-out infinite;
-  }
-  @keyframes loadbar {
-    0% { width: 0%; margin-left: 0%; }
-    50% { width: 60%; margin-left: 20%; }
-    100% { width: 0%; margin-left: 100%; }
-  }
-
-  .spinner {
-    display: inline-block; width: 12px; height: 12px;
-    border: 2px solid var(--border2); border-top-color: var(--accent);
-    border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 4px;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .add-form {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 16px; margin-bottom: 16px; display: none;
-  }
-  .add-form.open { display: block; }
-  .form-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-  .form-input {
-    flex: 1; min-width: 100px; padding: 8px 12px; font-size: 13px;
-    border-radius: var(--radius-sm); border: 1px solid var(--border2);
-    background: var(--bg3); color: var(--text); font-family: var(--font); transition: border-color .15s;
-  }
-  .form-input:focus { outline: none; border-color: var(--accent); }
-  .form-input::placeholder { color: var(--text3); }
-
-  .cfg-card {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
-  }
-  .cfg-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-  .cfg-desc { font-size: 12px; color: var(--text3); margin-bottom: 12px; line-height: 1.6; }
-  .cfg-row { display: flex; gap: 8px; }
-  .cfg-ok { font-size: 12px; color: var(--green); margin-top: 8px; display: none; }
-
-  .hist-item { padding: 14px 0; border-bottom: 1px solid var(--border); }
-  .hist-item:last-child { border-bottom: none; }
-  .hist-meta { font-size: 11px; color: var(--text3); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-family: var(--mono); }
-  .hist-tk { color: var(--accent); font-weight: 500; }
-  .hist-type-pill { padding: 2px 7px; border-radius: 999px; font-size: 10px; font-weight: 500; }
-  .hist-type-aether { background: var(--green-dim); color: var(--green); }
-  .hist-type-quick { background: var(--accent-dim); color: var(--accent); }
-  .hist-text { font-size: 13px; color: var(--text2); line-height: 1.6; white-space: pre-wrap; }
-
-  .empty {
-    text-align: center; padding: 48px 24px; color: var(--text3); font-size: 13px;
-    border: 1px dashed var(--border); border-radius: var(--radius); margin-bottom: 16px;
-  }
-  .empty-icon { font-size: 32px; margin-bottom: 12px; opacity: .4; }
-
-  .btn-all {
-    width: 100%; padding: 11px; font-size: 13px; border-radius: var(--radius);
-    border: 1px solid var(--border2); background: var(--bg2); color: var(--text);
-    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-    margin-bottom: 8px; font-family: var(--font); transition: background .15s;
-  }
-  .btn-all:hover:not(:disabled) { background: var(--bg3); }
-  .btn-all:disabled { opacity: .4; cursor: not-allowed; }
-  .btn-all-aether { border-color: rgba(62,207,142,0.25); color: var(--green); }
-  .btn-all-aether:hover:not(:disabled) { background: var(--green-dim); }
-
-  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
-
-  @media (max-width: 700px) {
-    .sidebar { display: none; }
-    .content { padding: 16px; }
-  }
+  .empty{text-align:center;padding:48px 24px;color:var(--text3);font-size:13px;border:1px dashed var(--border);border-radius:var(--radius);margin-bottom:16px}
+  .empty-icon{font-size:32px;margin-bottom:12px;opacity:.4}
+  .btn-all{width:100%;padding:11px;font-size:13px;border-radius:var(--radius);border:1px solid var(--border2);background:var(--bg2);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;font-family:var(--font);transition:background .15s}
+  .btn-all:hover:not(:disabled){background:var(--bg3)}
+  .btn-all:disabled{opacity:.4;cursor:not-allowed}
+  .btn-all-aether{border-color:rgba(62,207,142,0.25);color:var(--green)}
+  .btn-all-aether:hover:not(:disabled){background:var(--green-dim)}
+  .divider{border:none;border-top:1px solid var(--border);margin:16px 0}
+  .spinner{display:inline-block;width:12px;height:12px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:4px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .tag{font-size:10px;padding:2px 7px;border-radius:999px;font-weight:500}
+  .tag-purple{background:var(--purple-dim);color:var(--purple)}
+  @media(max-width:700px){.sidebar{display:none}.content{padding:16px}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.31.0/iconfont/tabler-icons.min.css">
 </head>
 <body>
-
 <header class="top-bar">
   <div class="logo">
     <div class="logo-icon"><i class="ti ti-chart-candle"></i></div>
-    <div>
-      <div class="logo-text">AETHER</div>
-      <div class="logo-sub">Analista de dividendos · largo plazo</div>
-    </div>
+    <div><div class="logo-text">AETHER</div><div class="logo-sub">Analista de dividendos · largo plazo</div></div>
   </div>
-  <div class="status-pill" id="status-pill">
-    <span class="status-dot"></span>
-    <span id="status-text">Configura tu API key</span>
-  </div>
+  <div class="status-pill" id="status-pill"><span class="status-dot"></span><span id="status-text">Configura tu API key</span></div>
 </header>
 
 <div class="main">
   <nav class="sidebar">
     <div class="nav-label">Agente</div>
-    <button class="nav-item active" onclick="switchPanel('cartera', this)">
-      <i class="ti ti-building-bank"></i> Cartera
-    </button>
-    <button class="nav-item" onclick="switchPanel('historial', this)">
-      <i class="ti ti-history"></i> Historial
-    </button>
+    <button class="nav-item active" onclick="switchPanel('dashboard',this)"><i class="ti ti-layout-dashboard"></i> Dashboard</button>
+    <button class="nav-item" onclick="switchPanel('cartera',this)"><i class="ti ti-building-bank"></i> Cartera</button>
+    <button class="nav-item" onclick="switchPanel('historial',this)"><i class="ti ti-history"></i> Historial</button>
     <div class="nav-label" style="margin-top:8px">Ajustes</div>
-    <button class="nav-item" onclick="switchPanel('config', this)">
-      <i class="ti ti-settings"></i> Configuración
-    </button>
+    <button class="nav-item" onclick="switchPanel('config',this)"><i class="ti ti-settings"></i> Configuración</button>
   </nav>
 
   <main class="content">
 
-    <div class="panel active" id="panel-cartera">
+    <!-- DASHBOARD -->
+    <div class="panel active" id="panel-dashboard">
       <div class="sec-header">
-        <div>
-          <div class="sec-title">Cartera de dividendos</div>
-          <div class="sec-sub">⚡ análisis rápido · ✦ AETHER completo con conclusión ejecutiva</div>
-        </div>
+        <div><div class="sec-title">Dashboard</div><div class="sec-sub">Visión global de tu cartera de dividendos</div></div>
+        <button class="btn" onclick="switchPanel('cartera',document.querySelector('.nav-item:nth-child(3)'))"><i class="ti ti-plus"></i> Añadir empresa</button>
+      </div>
+      <div class="dash-grid" id="dash-metrics"></div>
+      <div class="dash-section">
+        <div class="dash-section-title">Posiciones en cartera</div>
+        <div id="dash-positions"></div>
+      </div>
+      <div class="dash-section">
+        <div class="dash-section-title">Estado de análisis</div>
+        <div id="dash-status"></div>
+      </div>
+    </div>
+
+    <!-- CARTERA -->
+    <div class="panel" id="panel-cartera">
+      <div class="sec-header">
+        <div><div class="sec-title">Cartera de dividendos</div><div class="sec-sub">⚡ análisis rápido · ✦ AETHER 21 puntos en 2 fases</div></div>
         <button class="btn" onclick="toggleAdd()"><i class="ti ti-plus"></i> Añadir</button>
       </div>
-
       <div class="add-form" id="add-form">
         <div class="form-row">
-          <input class="form-input" id="i-ticker" placeholder="Ticker (ej. KO)" maxlength="8">
-          <input class="form-input" id="i-name" placeholder="Nombre empresa">
-          <input class="form-input" id="i-sector" placeholder="Sector">
+          <div class="form-group"><label class="form-label">Ticker</label><input class="form-input" id="i-ticker" placeholder="KO" maxlength="8"></div>
+          <div class="form-group"><label class="form-label">Nombre empresa</label><input class="form-input" id="i-name" placeholder="Coca-Cola"></div>
+          <div class="form-group"><label class="form-label">Sector</label><input class="form-input" id="i-sector" placeholder="Consumo"></div>
         </div>
-        <div style="display:flex;gap:8px;justify-content:flex-end">
+        <div class="form-section">Posición (opcional — para calcular yield on cost real y renta)</div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Precio de compra (€/$)</label><input class="form-input" id="i-price" placeholder="58.50" type="number" step="0.01"></div>
+          <div class="form-group"><label class="form-label">Nº de acciones</label><input class="form-input" id="i-shares" placeholder="100" type="number"></div>
+          <div class="form-group"><label class="form-label">Moneda</label>
+            <select class="form-input" id="i-currency"><option value="USD">USD ($)</option><option value="EUR">EUR (€)</option><option value="GBP">GBP (£)</option></select>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px">
           <button class="btn" onclick="toggleAdd()">Cancelar</button>
           <button class="btn btn-primary" onclick="addCompany()"><i class="ti ti-check"></i> Añadir</button>
         </div>
       </div>
-
       <div id="company-list"></div>
       <div class="empty" id="empty-state">
         <div class="empty-icon">📊</div>
         Añade empresas de dividendos para comenzar.<br>
         <strong>⚡</strong> análisis rápido · <strong>✦</strong> AETHER completo con semáforo, yield on cost y conclusión ejecutiva
       </div>
-
-      <button class="btn-all" id="btn-quick-all" onclick="runAll('quick')">
-        <i class="ti ti-bolt"></i> Análisis rápido — todas las empresas
-      </button>
-      <button class="btn-all btn-all-aether" id="btn-aether-all" onclick="runAll('aether')">
-        <i class="ti ti-sparkles"></i> Análisis AETHER completo — todas las empresas
-      </button>
+      <button class="btn-all" id="btn-quick-all" onclick="runAll('quick')"><i class="ti ti-bolt"></i> Análisis rápido — todas las empresas</button>
+      <button class="btn-all btn-all-aether" id="btn-aether-all" onclick="runAll('aether')"><i class="ti ti-sparkles"></i> Análisis AETHER completo — todas las empresas</button>
     </div>
 
+    <!-- HISTORIAL -->
     <div class="panel" id="panel-historial">
       <div class="sec-header">
-        <div>
-          <div class="sec-title">Historial de análisis</div>
-          <div class="sec-sub">Todos los análisis realizados, ordenados por fecha</div>
-        </div>
+        <div><div class="sec-title">Historial de análisis</div><div class="sec-sub">Todos los análisis realizados</div></div>
         <button class="btn" onclick="clearHistory()"><i class="ti ti-trash"></i> Limpiar</button>
       </div>
       <div id="hist-list"><div class="empty"><div class="empty-icon">🕐</div>Aún no hay análisis guardados.</div></div>
     </div>
 
+    <!-- CONFIG -->
     <div class="panel" id="panel-config">
-      <div class="sec-header">
-        <div>
-          <div class="sec-title">Configuración</div>
-          <div class="sec-sub">API key y opciones del agente</div>
-        </div>
-      </div>
+      <div class="sec-header"><div><div class="sec-title">Configuración</div><div class="sec-sub">API key y opciones</div></div></div>
       <div class="cfg-card">
         <div class="cfg-title">API key de Anthropic</div>
-        <div class="cfg-desc">
-          Tu clave se guarda únicamente en el almacenamiento local de este navegador. Nadie más puede acceder a ella.<br>
-          Obtenla en <strong>console.anthropic.com → API Keys</strong>.
-        </div>
+        <div class="cfg-desc">Guardada únicamente en el almacenamiento local de este navegador. Obtenla en <strong>console.anthropic.com → API Keys</strong>.</div>
         <div class="cfg-row">
           <input type="password" class="form-input" id="api-key-cfg" placeholder="sk-ant-api03-..." autocomplete="off">
           <button class="btn btn-primary" onclick="saveKeyCfg()"><i class="ti ti-check"></i> Guardar</button>
         </div>
-        <div class="cfg-ok" id="cfg-ok"><i class="ti ti-check"></i> API key guardada correctamente</div>
+        <div class="cfg-ok" id="cfg-ok"><i class="ti ti-check"></i> Guardada correctamente</div>
       </div>
       <div class="cfg-card">
         <div class="cfg-title">Datos guardados</div>
-        <div class="cfg-desc">Borra el historial de análisis o todos los datos del agente.</div>
+        <div class="cfg-desc">Borra el historial o todos los datos del agente.</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn" onclick="clearHistory()"><i class="ti ti-trash"></i> Borrar historial</button>
           <button class="btn" style="color:var(--red);border-color:rgba(240,100,73,0.3)" onclick="clearAll()"><i class="ti ti-alert-triangle"></i> Borrar todo</button>
@@ -358,112 +281,220 @@
 </div>
 
 <script>
-const SK='aether2_companies', HK='aether2_history', AK='aether2_apikey';
-let companies=[], history=[], apiKey='', running=false;
+const SK='aether4_companies',HK='aether4_history',AK='aether4_apikey';
+let companies=[],history=[],apiKey='',running=false;
 
 function load(){
   try{const r=localStorage.getItem(SK);if(r)companies=JSON.parse(r);}catch(e){}
   try{const h=localStorage.getItem(HK);if(h)history=JSON.parse(h);}catch(e){}
   try{const k=localStorage.getItem(AK);if(k)apiKey=k;}catch(e){}
-  updateStatusUI(); renderCompanies(); renderHistory();
+  updateStatusUI();renderDashboard();renderCompanies();renderHistory();
 }
-
-function save(){ try{localStorage.setItem(SK,JSON.stringify(companies));}catch(e){} }
-function saveHist(){ try{localStorage.setItem(HK,JSON.stringify(history.slice(-60)));}catch(e){} }
-
+function save(){try{localStorage.setItem(SK,JSON.stringify(companies));}catch(e){}}
+function saveHist(){try{localStorage.setItem(HK,JSON.stringify(history.slice(-60)));}catch(e){}}
 function updateStatusUI(){
-  const pill=document.getElementById('status-pill');
-  const txt=document.getElementById('status-text');
-  if(apiKey){ pill.className='status-pill on'; txt.textContent='Listo'; }
-  else { pill.className='status-pill'; txt.textContent='Configura tu API key'; }
+  const pill=document.getElementById('status-pill'),txt=document.getElementById('status-text');
+  if(apiKey){pill.className='status-pill on';txt.textContent='Listo';}
+  else{pill.className='status-pill';txt.textContent='Configura tu API key';}
 }
-
 function saveKeyCfg(){
-  const v=document.getElementById('api-key-cfg').value.trim();
-  if(!v) return;
-  apiKey=v;
-  try{localStorage.setItem(AK,apiKey);}catch(e){}
-  const ok=document.getElementById('cfg-ok');
-  ok.style.display='block';
-  setTimeout(()=>ok.style.display='none',3000);
-  updateStatusUI();
+  const v=document.getElementById('api-key-cfg').value.trim();if(!v)return;
+  apiKey=v;try{localStorage.setItem(AK,apiKey);}catch(e){}
+  const ok=document.getElementById('cfg-ok');ok.style.display='block';
+  setTimeout(()=>ok.style.display='none',3000);updateStatusUI();
+}
+function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function nowStr(){return new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});}
+function fmt(n,dec=2){return n!=null&&!isNaN(n)?Number(n).toLocaleString('es-ES',{minimumFractionDigits:dec,maximumFractionDigits:dec}):'—'}
+function fmtCur(n,cur='USD'){const s={USD:'$',EUR:'€',GBP:'£'}[cur]||'';return n!=null&&!isNaN(n)?s+fmt(n):'—'}
+
+function semClass(s){return!s?'':s==='COMPRA'?'sem-verde':s==='ESPERA'?'sem-amarillo':'sem-rojo';}
+function semIcon(s){return!s?'':s==='COMPRA'?'🟢':s==='ESPERA'?'🟡':'🔴';}
+function semDotClass(s){return!s?'none':s==='COMPRA'?'verde':s==='ESPERA'?'amarillo':'rojo';}
+
+/* ── DASHBOARD ── */
+function calcPosition(c){
+  const p={};
+  if(c.position&&c.position.price&&c.position.shares){
+    p.invested=c.position.price*c.position.shares;
+    p.cur=c.position.currency||'USD';
+    // yield on cost real si tenemos yield actual del análisis
+    if(c.aether&&c.aether.yoc&&c.aether.yoc.actual){
+      const yStr=c.aether.yoc.actual.replace('%','').replace(',','.');
+      const y=parseFloat(yStr);
+      if(!isNaN(y)){
+        // yield on cost real = (yield actual * precio actual) / precio compra
+        // aproximamos con precio actual = precio compra (conservador)
+        p.yocReal=y; // base, se refina si hay precio actual
+        // DPA estimado = yield% * precio compra
+        const dpa=c.position.price*(y/100);
+        p.dpa=dpa;
+        p.rentaAnual=dpa*c.position.shares;
+        p.yocReal=y; // yield on cost = yield actual porque compraste al precio actual
+      }
+    }
+    // crecimiento estimado YOC a 5 años
+    if(c.aether&&c.aether.yoc&&c.aether.yoc.yoc5){
+      const y5=parseFloat(c.aether.yoc.yoc5.replace('%','').replace(',','.'));
+      if(!isNaN(y5)){
+        const dpa5=c.position.price*(y5/100);
+        p.rentaAnual5=dpa5*c.position.shares;
+      }
+    }
+  }
+  return p;
 }
 
-function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function nowStr(){ return new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'}); }
+function renderDashboard(){
+  const metricsEl=document.getElementById('dash-metrics');
+  const posEl=document.getElementById('dash-positions');
+  const statusEl=document.getElementById('dash-status');
+  if(!companies.length){
+    metricsEl.innerHTML='';
+    posEl.innerHTML='<div class="empty" style="padding:24px"><div class="empty-icon">📊</div>Añade empresas en la sección Cartera para ver tu dashboard.</div>';
+    statusEl.innerHTML='';
+    return;
+  }
 
+  // Calcular métricas globales
+  let totalInvested=0,totalRentaAnual=0,totalRentaAnual5=0,countPos=0;
+  let yieldSum=0,yieldCount=0;
+  const analyzed=companies.filter(c=>c.aether&&c.aether.text).length;
+  const compra=companies.filter(c=>c.aether&&c.aether.semaforo==='COMPRA').length;
+  const espera=companies.filter(c=>c.aether&&c.aether.semaforo==='ESPERA').length;
+  const descarta=companies.filter(c=>c.aether&&c.aether.semaforo==='DESCARTA').length;
+
+  companies.forEach(c=>{
+    const pos=calcPosition(c);
+    if(pos.invested){totalInvested+=pos.invested;countPos++;}
+    if(pos.rentaAnual){totalRentaAnual+=pos.rentaAnual;}
+    if(pos.rentaAnual5){totalRentaAnual5+=pos.rentaAnual5;}
+    if(c.aether&&c.aether.yoc&&c.aether.yoc.actual){
+      const y=parseFloat(c.aether.yoc.actual.replace('%','').replace(',','.'));
+      if(!isNaN(y)){yieldSum+=y;yieldCount++;}
+    }
+  });
+
+  const yieldMedio=yieldCount?yieldSum/yieldCount:null;
+  const yocMensual=totalRentaAnual/12;
+
+  metricsEl.innerHTML=`
+    <div class="dash-card"><div class="dash-label">Empresas seguidas</div><div class="dash-val accent">${companies.length}</div><div class="dash-sub">${analyzed} con análisis AETHER</div></div>
+    ${totalInvested?`<div class="dash-card"><div class="dash-label">Capital invertido</div><div class="dash-val">${fmtCur(totalInvested)}</div><div class="dash-sub">${countPos} posición${countPos!==1?'es':''} con datos</div></div>`:''}
+    ${totalRentaAnual?`<div class="dash-card"><div class="dash-label">Renta anual estimada</div><div class="dash-val green">${fmtCur(totalRentaAnual)}</div><div class="dash-sub">${fmtCur(yocMensual)}/mes</div></div>`:''}
+    ${totalRentaAnual5?`<div class="dash-card"><div class="dash-label">Renta estimada en 5 años</div><div class="dash-val purple">${fmtCur(totalRentaAnual5)}</div><div class="dash-sub">Con crecimiento del dividendo</div></div>`:''}
+    ${yieldMedio?`<div class="dash-card"><div class="dash-label">Yield medio cartera</div><div class="dash-val amber">${fmt(yieldMedio,1)}%</div><div class="dash-sub">Ponderado por análisis</div></div>`:''}
+    <div class="dash-card"><div class="dash-label">Semáforo cartera</div><div class="dash-val" style="font-size:18px;margin-top:4px">🟢${compra} 🟡${espera} 🔴${descarta}</div><div class="dash-sub">Compra · Espera · Descarta</div></div>
+  `;
+
+  // Tabla de posiciones
+  const withPos=companies.filter(c=>c.position&&c.position.price&&c.position.shares);
+  if(withPos.length){
+    let rows=withPos.map(c=>{
+      const pos=calcPosition(c);
+      const sem=c.aether&&c.aether.semaforo?`<span class="sem-dot ${semDotClass(c.aether.semaforo)}"></span>`:'<span class="sem-dot none"></span>';
+      return `<tr>
+        <td class="name">${sem}${esc(c.name)} <span style="color:var(--text3);font-family:var(--mono);font-size:11px">${esc(c.ticker)}</span></td>
+        <td>${fmtCur(c.position.price,c.position.currency)}</td>
+        <td>${fmt(c.position.shares,0)}</td>
+        <td>${fmtCur(pos.invested,c.position.currency)}</td>
+        <td class="${pos.yocReal?'pos-gain':''}">${pos.yocReal?fmt(pos.yocReal,2)+'%':'—'}</td>
+        <td class="${pos.rentaAnual?'pos-gain':''}">${pos.rentaAnual?fmtCur(pos.rentaAnual,c.position.currency):'—'}</td>
+        <td class="${pos.rentaAnual5?'':''}" style="color:var(--purple)">${pos.rentaAnual5?fmtCur(pos.rentaAnual5,c.position.currency):'—'}</td>
+      </tr>`;
+    }).join('');
+    posEl.innerHTML=`<table class="positions-table">
+      <thead><tr>
+        <th>Empresa</th><th>Precio compra</th><th>Acciones</th><th>Invertido</th>
+        <th>Yield on cost</th><th>Renta anual</th><th>Renta anual 5a</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+  } else {
+    posEl.innerHTML='<div style="font-size:13px;color:var(--text3);padding:12px 0">Añade precio de compra y número de acciones en cada empresa para ver tu renta real y yield on cost.</div>';
+  }
+
+  // Estado de análisis
+  statusEl.innerHTML=`<div style="display:flex;flex-direction:column;gap:6px">
+    ${companies.map(c=>{
+      const hasA=c.aether&&c.aether.text;
+      const hasQ=c.quick&&c.quick.text;
+      const sem=c.aether&&c.aether.semaforo?`<span class="semaforo ${semClass(c.aether.semaforo)}" style="font-size:11px;padding:2px 8px">${semIcon(c.aether.semaforo)} ${esc(c.aether.semaforo)}</span>`:'';
+      const score=c.aether&&c.aether.yoc&&c.aether.yoc.score?`<span class="tag tag-purple">${esc(c.aether.yoc.score)}</span>`:'';
+      const date=hasA?c.aether.date:hasQ?c.quick.date:'';
+      const dateLabel=date?`<span style="font-size:11px;color:var(--text3);font-family:var(--mono)">${date}</span>`:'';
+      return `<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);flex-wrap:wrap">
+        <span style="font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);width:50px">${esc(c.ticker)}</span>
+        <span style="font-size:13px;color:var(--text);flex:1">${esc(c.name)}</span>
+        ${sem}${score}${dateLabel}
+        ${!hasA&&!hasQ?'<span style="font-size:11px;color:var(--text3)">Sin análisis</span>':''}
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+/* ── RENDER COMPANIES ── */
 function renderCompanies(){
-  const list=document.getElementById('company-list');
-  const empty=document.getElementById('empty-state');
-  if(!companies.length){ list.innerHTML=''; empty.style.display='block'; return; }
+  const list=document.getElementById('company-list'),empty=document.getElementById('empty-state');
+  if(!companies.length){list.innerHTML='';empty.style.display='block';return;}
   empty.style.display='none';
   list.innerHTML=companies.map((c,i)=>cardHTML(c,i)).join('');
 }
 
 function cardHTML(c,i){
-  const hasQ=c.quick&&c.quick.text;
-  const hasA=c.aether&&c.aether.text;
-  const loading=c.loading;
-  let pillClass='pill-none', pillLabel='Sin análisis';
-  if(loading){ pillClass='pill-loading'; pillLabel='<span class="spinner"></span>Analizando…'; }
-  else if(hasA){ pillClass='pill-aether'; pillLabel='✦ AETHER '+c.aether.date; }
-  else if(hasQ){ pillClass='pill-quick'; pillLabel='⚡ '+c.quick.date; }
-
+  const hasQ=c.quick&&c.quick.text,hasA=c.aether&&c.aether.text,loading=c.loading;
+  let pillClass='pill-none',pillLabel='Sin análisis';
+  if(loading){pillClass='pill-loading';pillLabel=`<span class="spinner"></span>${esc(c.loadingPhase||'Analizando…')}`;}
+  else if(hasA){pillClass='pill-aether';pillLabel='✦ AETHER '+c.aether.date;}
+  else if(hasQ){pillClass='pill-quick';pillLabel='⚡ '+c.quick.date;}
   const activeTab=c.viewTab||(hasA?'aether':'quick');
   const showBody=hasQ||hasA||loading;
-
-  let semHTML='';
-  if(!loading && hasA && c.aether.semaforo){
-    const s=c.aether.semaforo;
-    const cls=s==='COMPRA'?'sem-verde':s==='ESPERA'?'sem-amarillo':'sem-rojo';
-    const ico=s==='COMPRA'?'🟢':s==='ESPERA'?'🟡':'🔴';
-    semHTML=`<span class="semaforo ${cls}">${ico} ${s}</span>`;
-  }
+  const sem=!loading&&hasA&&c.aether.semaforo?`<span class="semaforo ${semClass(c.aether.semaforo)}" style="font-size:11px;padding:2px 8px">${semIcon(c.aether.semaforo)} ${esc(c.aether.semaforo)}</span>`:'';
+  const pos=calcPosition(c);
+  const posTag=c.position&&c.position.price?`<span class="tag tag-purple" style="margin-left:4px">YoC ${pos.yocReal?fmt(pos.yocReal,1)+'%':'—'}</span>`:'';
 
   return `<div class="company-card">
     <div class="card-header">
       <div class="ticker-box">${esc(c.ticker)}</div>
       <div class="card-info">
-        <div class="card-name">${esc(c.name)} ${semHTML}</div>
-        <div class="card-meta">${esc(c.sector)}</div>
+        <div class="card-name">${esc(c.name)} ${sem}${posTag}</div>
+        <div class="card-meta">${esc(c.sector)}${c.position&&c.position.shares?` · ${fmt(c.position.shares,0)} acciones a ${fmtCur(c.position.price,c.position.currency)}`:''}</div>
       </div>
       <div class="card-actions">
         <span class="pill ${pillClass}">${pillLabel}</span>
-        <button class="btn btn-icon" onclick="runOne(${i},'quick')" title="Análisis rápido" ${loading||!apiKey?'disabled':''}>
-          <i class="ti ti-bolt"></i>
-        </button>
-        <button class="btn btn-icon btn-green" onclick="runOne(${i},'aether')" title="Análisis AETHER completo" ${loading||!apiKey?'disabled':''}>
-          <i class="ti ti-sparkles"></i>
-        </button>
-        <button class="btn btn-icon" onclick="removeCompany(${i})" title="Eliminar">
-          <i class="ti ti-x"></i>
-        </button>
+        <button class="btn btn-icon" onclick="editPosition(${i})" title="Editar posición"><i class="ti ti-coin"></i></button>
+        <button class="btn btn-icon" onclick="runOne(${i},'quick')" title="Análisis rápido" ${loading||!apiKey?'disabled':''}><i class="ti ti-bolt"></i></button>
+        <button class="btn btn-icon btn-green" onclick="runOne(${i},'aether')" title="AETHER completo" ${loading||!apiKey?'disabled':''}><i class="ti ti-sparkles"></i></button>
+        <button class="btn btn-icon" onclick="removeCompany(${i})" title="Eliminar"><i class="ti ti-x"></i></button>
       </div>
     </div>
     ${showBody?`<div class="analysis-body">
-      ${loading?`<div class="loading-bar"><div class="loading-bar-fill"></div></div>
-        <div class="analysis-date">Consultando datos en tiempo real…</div>`:''}
+      ${loading?`<div class="progress-wrap">
+        <div class="progress-label"><span class="spinner"></span>${esc(c.loadingPhase||'Iniciando análisis…')}</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${c.loadingPct||10}%"></div></div>
+      </div>`:''}
       ${!loading&&hasQ&&hasA?`<div class="analysis-tabs">
         <button class="atab ${activeTab==='quick'?'active':''}" onclick="switchATab(${i},'quick')">⚡ Rápido</button>
         <button class="atab ${activeTab==='aether'?'active':''}" onclick="switchATab(${i},'aether')">✦ AETHER completo</button>
       </div>`:''}
-      ${!loading&&activeTab==='quick'&&hasQ?`
-        <div class="analysis-date">Análisis rápido · ${c.quick.date}</div>
-        <div class="analysis-text">${esc(c.quick.text)}</div>`:''}
+      ${!loading&&activeTab==='quick'&&hasQ?`<div class="analysis-date">Análisis rápido · ${c.quick.date}</div><div class="analysis-text">${esc(c.quick.text)}</div>`:''}
       ${!loading&&activeTab==='aether'&&hasA?`
         ${c.aether.exec?`<div class="exec-summary">
           <div class="exec-header">
             <span class="exec-label">Conclusión ejecutiva</span>
-            ${c.aether.semaforo?`<span class="semaforo ${c.aether.semaforo==='COMPRA'?'sem-verde':c.aether.semaforo==='ESPERA'?'sem-amarillo':'sem-rojo'}">${c.aether.semaforo==='COMPRA'?'🟢':c.aether.semaforo==='ESPERA'?'🟡':'🔴'} ${esc(c.aether.semaforo)}</span>`:''}
+            ${c.aether.semaforo?`<span class="semaforo ${semClass(c.aether.semaforo)}">${semIcon(c.aether.semaforo)} ${esc(c.aether.semaforo)}</span>`:''}
           </div>
           <div class="exec-text">${esc(c.aether.exec)}</div>
         </div>`:''}
-        ${c.aether.yoc?`<div class="yoc-grid">
+        ${(c.aether.yoc||pos.rentaAnual)?`<div class="yoc-grid">
+          ${c.aether.yoc?`
           <div class="yoc-card"><div class="yoc-val accent">${esc(c.aether.yoc.actual||'—')}</div><div class="yoc-label">Yield actual</div></div>
-          <div class="yoc-card"><div class="yoc-val green">${esc(c.aether.yoc.yoc5||'—')}</div><div class="yoc-label">Yield on cost 5 años</div></div>
-          <div class="yoc-card"><div class="yoc-val green">${esc(c.aether.yoc.yoc10||'—')}</div><div class="yoc-label">Yield on cost 10 años</div></div>
-          <div class="yoc-card"><div class="yoc-val amber">${esc(c.aether.yoc.crecimiento||'—')}</div><div class="yoc-label">Crecimiento dividendo</div></div>
-          <div class="yoc-card"><div class="yoc-val accent">${esc(c.aether.yoc.score||'—')}</div><div class="yoc-label">Score AETHER</div></div>
+          <div class="yoc-card"><div class="yoc-val green">${esc(c.aether.yoc.yoc5||'—')}</div><div class="yoc-label">Yield on cost 5a</div></div>
+          <div class="yoc-card"><div class="yoc-val green">${esc(c.aether.yoc.yoc10||'—')}</div><div class="yoc-label">Yield on cost 10a</div></div>
+          <div class="yoc-card"><div class="yoc-val amber">${esc(c.aether.yoc.crecimiento||'—')}</div><div class="yoc-label">Crec. dividendo</div></div>
+          <div class="yoc-card"><div class="yoc-val accent">${esc(c.aether.yoc.score||'—')}</div><div class="yoc-label">Score AETHER</div></div>`:''}
+          ${pos.rentaAnual?`<div class="yoc-card"><div class="yoc-val purple">${fmtCur(pos.rentaAnual,c.position.currency)}</div><div class="yoc-label">Renta anual real</div></div>`:''}
+          ${pos.rentaAnual5?`<div class="yoc-card"><div class="yoc-val purple">${fmtCur(pos.rentaAnual5,c.position.currency)}</div><div class="yoc-label">Renta anual 5a</div></div>`:''}
         </div>`:''}
         <div class="analysis-date">Análisis AETHER · ${c.aether.date}</div>
         <div class="analysis-text">${esc(c.aether.text)}</div>`:''}
@@ -475,282 +506,255 @@ function cardHTML(c,i){
   </div>`;
 }
 
-function switchATab(i,tab){ companies[i].viewTab=tab; renderCompanies(); }
+function switchATab(i,tab){companies[i].viewTab=tab;renderCompanies();}
+
+function editPosition(i){
+  const c=companies[i];
+  const price=prompt(`Precio de compra para ${c.name} (${c.ticker}):`,c.position?.price||'');
+  if(price===null)return;
+  const shares=prompt('Número de acciones:',c.position?.shares||'');
+  if(shares===null)return;
+  const currency=prompt('Moneda (USD/EUR/GBP):',c.position?.currency||'USD');
+  if(!companies[i].position)companies[i].position={};
+  companies[i].position.price=parseFloat(price)||null;
+  companies[i].position.shares=parseFloat(shares)||null;
+  companies[i].position.currency=(currency||'USD').toUpperCase();
+  save();renderCompanies();renderDashboard();
+}
 
 function toggleAdd(){
-  const f=document.getElementById('add-form');
-  f.classList.toggle('open');
-  if(f.classList.contains('open')) document.getElementById('i-ticker').focus();
+  const f=document.getElementById('add-form');f.classList.toggle('open');
+  if(f.classList.contains('open'))document.getElementById('i-ticker').focus();
 }
 
 function addCompany(){
   const ticker=document.getElementById('i-ticker').value.trim().toUpperCase();
   const name=document.getElementById('i-name').value.trim();
   const sector=document.getElementById('i-sector').value.trim();
-  if(!ticker||!name) return;
-  companies.push({ticker,name,sector:sector||'Sin clasificar',loading:false,quick:null,aether:null,viewTab:'quick'});
-  save(); renderCompanies();
-  ['i-ticker','i-name','i-sector'].forEach(id=>document.getElementById(id).value='');
+  const price=parseFloat(document.getElementById('i-price').value)||null;
+  const shares=parseFloat(document.getElementById('i-shares').value)||null;
+  const currency=document.getElementById('i-currency').value||'USD';
+  if(!ticker||!name)return;
+  companies.push({
+    ticker,name,sector:sector||'Sin clasificar',
+    loading:false,quick:null,aether:null,viewTab:'quick',
+    position:price&&shares?{price,shares,currency}:null
+  });
+  save();renderCompanies();renderDashboard();
+  ['i-ticker','i-name','i-sector','i-price','i-shares'].forEach(id=>document.getElementById(id).value='');
   toggleAdd();
 }
 
-function removeCompany(i){ companies.splice(i,1); save(); renderCompanies(); }
-
-function buildQuickPrompt(c){
-  return `Eres un analista financiero experto en inversión por dividendos a largo plazo. Analiza ${c.name} (${c.ticker}, sector: ${c.sector}) con datos actualizados usando búsqueda web.
-
-Responde en español, texto plano sin markdown, máximo 200 palabras:
-
-SEMAFORO: [escribe exactamente COMPRA, ESPERA o DESCARTA según tu veredicto]
-
-1) Dividendo actual: yield, DPA, frecuencia, años consecutivos de pago/crecimiento
-2) Sostenibilidad: payout ratio sobre beneficio y FCF, cobertura real
-3) Yield on cost estimado a 5 años si el dividendo crece a la tasa histórica
-4) Fortaleza y riesgo principal para el dividendo
-5) Veredicto en 2 líneas para inversor de largo plazo`;
+function removeCompany(i){
+  if(!confirm(`¿Eliminar ${companies[i].name} de la cartera?`))return;
+  companies.splice(i,1);save();renderCompanies();renderDashboard();
 }
 
-function buildAETHERPrompt(c){
-  return `Eres AETHER, analista financiero de élite especializado en inversión por dividendos a largo plazo. Tu cliente es conservador, busca rentas crecientes y horizonte de 10+ años. Analiza ${c.name} (ticker: ${c.ticker}, sector: ${c.sector}) con búsqueda web para datos actualizados a hoy.
-
-Responde en español. Texto plano, sin markdown, sin asteriscos. Encabeza cada sección como "PUNTO X — TÍTULO".
-
-Primero incluye estas líneas de metadatos (una por línea, sin espacios extra):
-SEMAFORO:[COMPRA|ESPERA|DESCARTA]
-EXEC:[conclusión ejecutiva de exactamente 4-5 líneas: qué es, por qué comprar/esperar/descartar, a qué precio entrar y cuál es el mayor riesgo]
-YOC_ACTUAL:[yield actual en %]
-YOC_5:[yield on cost estimado a 5 años en %]
-YOC_10:[yield on cost estimado a 10 años en %]
-YOC_CREC:[tasa de crecimiento anual del dividendo usada, en %]
-SCORE:[X/60]
-
-Luego desarrolla los puntos:
-
-PUNTO 1 — CALIDAD DEL NEGOCIO
-Modelo de negocio, posición sectorial, predictibilidad de ingresos, barreras de entrada. ¿Es un negocio que puede pagar dividendo creciente en recesión?
-
-PUNTO 2 — VENTAJAS COMPETITIVAS (MOAT)
-Tipo de moat, solidez y durabilidad estimada. ¿Protege el dividendo a 10 años?
-
-PUNTO 3 — SOLIDEZ FINANCIERA
-Deuda neta/EBITDA, interest coverage, rating crediticio, tendencia últimos 3 años. ¿La deuda amenaza el dividendo?
-
-PUNTO 4 — DIVIDENDO: HISTORIAL Y POLÍTICA
-Yield actual, DPA, frecuencia, años consecutivos de pago y crecimiento. ¿Dividend Aristocrat o King? Política oficial de dividendo de la empresa.
-
-PUNTO 5 — COBERTURA REAL POR FCF
-FCF últimos 12 meses, FCF por acción vs DPA. FCF payout ratio. ¿Sobra caja tras el dividendo para crecer o reducir deuda?
-
-PUNTO 6 — YIELD ON COST Y POTENCIA DEL DIVIDENDO CRECIENTE
-Calcula el yield on cost a 5 y 10 años usando la tasa de crecimiento histórica del dividendo. Explica por qué el crecimiento del dividendo importa más que el yield inicial para el inversor de largo plazo.
-
-PUNTO 7 — DIVIDEND DISCOUNT MODEL (GORDON GROWTH)
-Calcula el valor intrínseco usando DDM simplificado: V = D1 / (Ke - g). Usa Ke razonable para el sector y g = tasa de crecimiento sostenible. ¿Está el precio actual por encima o debajo del valor intrínseco?
-
-PUNTO 8 — VALORACIÓN POR YIELD HISTÓRICO
-Yield actual vs yield histórico medio 5 y 10 años. Si yield actual > media histórica: señal de infravaloración. Cuantifica la diferencia y la señal.
-
-PUNTO 9 — VALORACIÓN POR PER Y FCF YIELD
-PER actual vs histórico y sector. FCF yield actual. ¿Cara, justa o barata por múltiplos?
-
-PUNTO 10 — SOLIDEZ DEL DIVIDENDO EN CRISIS HISTÓRICAS
-¿Qué pasó con el dividendo en 2008-2009, 2020 y el ciclo de subida de tipos 2022-2023? ¿Se mantuvo, creció o se recortó? Este historial bajo presión real vale más que cualquier modelo.
-
-PUNTO 11 — STRESS TEST DEL DIVIDENDO
-¿Qué caída de ingresos o FCF pondría en riesgo el dividendo hoy? Calcula el umbral de seguridad. ¿Cuánto margen hay?
-
-PUNTO 12 — ENTORNO MACRO Y TIPOS DE INTERÉS
-Sensibilidad histórica del precio a subidas de tipos. ¿Qué yield necesita ofrecer para competir con el bono a 10 años actual? Riesgos regulatorios y geopolíticos relevantes.
-
-PUNTO 13 — COMPETIDORES DEL DIVIDENDO EN EL SECTOR
-¿Hay alternativas en el mismo sector con mejor yield, mayor crecimiento del dividendo o mejor cobertura FCF? Nombra 2-3 competidores y compara brevemente.
-
-PUNTO 14 — ROIC Y CREACIÓN DE VALOR
-ROIC medio 5 años vs WACC estimado. ¿Crea o destruye valor? Una empresa que destruye valor no puede crecer el dividendo indefinidamente.
-
-PUNTO 15 — CALIDAD DIRECTIVA Y ASIGNACIÓN DE CAPITAL
-Track record demostrado: ¿priorizan el dividendo bajo presión? ¿Han recortado recompras para protegerlo? ¿M&A destructivo o creador de valor?
-
-PUNTO 16 — RIESGO DE DISRUPCIÓN Y RELEVANCIA A 10 AÑOS
-Probabilidad de disrupción en 5-10 años. ¿El moat aguanta? Impacto de la IA: ¿amenaza, eficiencia o irrelevante para este negocio concreto?
-
-PUNTO 17 — ESCENARIOS A 3 AÑOS (ENFOCADOS EN EL DIVIDENDO)
-Para cada escenario indica qué pasa CON EL DIVIDENDO, no solo con el precio:
-Optimista (25%): dividendo proyectado y rentabilidad total.
-Base (55%): dividendo proyectado y rentabilidad total.
-Pesimista (20%): ¿se mantiene el dividendo? ¿Recorte posible?
-Rentabilidad total esperada ponderada.
-
-PUNTO 18 — RENTABILIDAD ESPERADA A 5 Y 10 AÑOS
-Desglose anualizado: yield actual + crecimiento del dividendo + cambio de múltiplo. TIR total estimada. Compara con el bono a 10 años actual como referencia.
-
-PUNTO 19 — RANGOS DE ENTRADA
-Precio óptimo: yield > media histórica + margen de seguridad del 10%.
-Precio razonable: yield en línea con media histórica.
-Precio caro: yield por debajo de media histórica. Precio actual y conclusión de momento de entrada.
-
-PUNTO 20 — SCORING AETHER FINAL (sobre 60)
-Calidad negocio /10, Moat /10, Solidez financiera /10, Dividendo y sostenibilidad /10, Valoración /10, Calidad directiva /10.
-Total: XX/60. Incluye una frase de veredicto final.
-
-PUNTO 21 — FECHA Y VIGENCIA
-Fecha de hoy. Qué eventos concretos invalidarían este análisis antes de la próxima revisión anual.`;
+function setLoading(i,phase,pct){
+  companies[i].loading=true;companies[i].loadingPhase=phase;companies[i].loadingPct=pct;renderCompanies();
 }
 
-async function callAPI(prompt){
+async function callAPI(prompt,maxTokens=4000){
   const res=await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'x-api-key':apiKey,
-      'anthropic-version':'2023-06-01',
-      'anthropic-dangerous-direct-browser-access':'true'
-    },
-    body:JSON.stringify({
-      model:'claude-sonnet-4-6',
-      max_tokens:5000,
-      tools:[{type:'web_search_20250305',name:'web_search'}],
-      messages:[{role:'user',content:prompt}]
-    })
+    headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:maxTokens,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})
   });
-  if(!res.ok){
-    const err=await res.json().catch(()=>({}));
-    throw new Error(err.error?.message||`Error ${res.status}`);
-  }
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||`Error ${res.status}`);}
   const data=await res.json();
   return data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n').trim();
 }
 
+function buildQuickPrompt(c){
+  const posCtx=c.position&&c.position.price?`El inversor tiene ${c.position.shares} acciones compradas a ${c.position.price} ${c.position.currency}.`:'';
+  return `Eres un analista financiero experto en inversión por dividendos a largo plazo. Analiza ${c.name} (${c.ticker}, sector: ${c.sector}) con datos actualizados usando búsqueda web. ${posCtx}
+Responde en español, texto plano sin markdown, máximo 200 palabras.
+Primera línea obligatoria: SEMAFORO:[COMPRA|ESPERA|DESCARTA]
+1) Dividendo: yield actual, DPA, frecuencia, años consecutivos
+2) Sostenibilidad: payout sobre beneficio y FCF
+3) Yield on cost estimado a 5 años${c.position?.price?` y yield on cost real del inversor (precio compra: ${c.position.price} ${c.position.currency||'USD'})`:''}
+4) Fortaleza y riesgo principal
+5) Veredicto en 2 líneas`;
+}
+
+function buildAETHERPart1(c){
+  const posCtx=c.position&&c.position.price?`\nDATOS DE POSICIÓN DEL INVERSOR: ${c.position.shares} acciones a precio de compra ${c.position.price} ${c.position.currency||'USD'}. Calcula el yield on cost real sobre este precio de compra.`:'';
+  return `Eres AETHER, analista financiero de élite especializado en dividendos a largo plazo. Analiza ${c.name} (${c.ticker}, sector: ${c.sector}) usando búsqueda web para datos actualizados a hoy.${posCtx}
+Responde en español, texto plano sin markdown.
+
+Metadatos obligatorios (una por línea):
+SEMAFORO:[COMPRA|ESPERA|DESCARTA]
+EXEC:[conclusión ejecutiva 4-5 líneas: qué es, veredicto, precio entrada y mayor riesgo]
+YOC_ACTUAL:[yield actual %]
+YOC_5:[yield on cost teórico a 5 años %]
+YOC_10:[yield on cost teórico a 10 años %]
+YOC_CREC:[tasa crecimiento dividendo usada %]
+SCORE:[XX/60]
+
+PUNTO 1 — CALIDAD DEL NEGOCIO
+Modelo de negocio, posición sectorial, predictibilidad de ingresos, barreras de entrada.
+
+PUNTO 2 — VENTAJAS COMPETITIVAS (MOAT)
+Tipo de moat, solidez y durabilidad estimada.
+
+PUNTO 3 — SOLIDEZ FINANCIERA
+Deuda neta/EBITDA, interest coverage, rating crediticio, tendencia 3 años.
+
+PUNTO 4 — DIVIDENDO: HISTORIAL Y POLÍTICA
+Yield actual, DPA, frecuencia, años consecutivos. ¿Aristocrat o King?
+
+PUNTO 5 — COBERTURA REAL POR FCF
+FCF últimos 12 meses, FCF por acción vs DPA, FCF payout ratio.
+
+PUNTO 6 — YIELD ON COST Y POTENCIA DEL DIVIDENDO CRECIENTE
+Calcula yield on cost teórico a 5 y 10 años con tasa histórica.${c.position?.price?` Calcula también el yield on cost REAL del inversor sobre precio de compra ${c.position.price} ${c.position.currency||'USD'} a 5 y 10 años.`:''}
+
+PUNTO 7 — DIVIDEND DISCOUNT MODEL (GORDON GROWTH)
+V = D1 / (Ke - g). ¿Precio actual sobre o bajo valor intrínseco?
+
+PUNTO 8 — VALORACIÓN POR YIELD HISTÓRICO
+Yield actual vs media histórica 5 y 10 años. Señal de valoración.
+
+PUNTO 9 — VALORACIÓN POR PER Y FCF YIELD
+PER actual vs histórico y sector. FCF yield.
+
+PUNTO 10 — SOLIDEZ EN CRISIS HISTÓRICAS
+2008-2009, 2020, subida tipos 2022-2023. ¿El dividendo se mantuvo, creció o recortó?
+
+PUNTO 11 — STRESS TEST DEL DIVIDENDO
+Umbral de seguridad: ¿qué caída de FCF/ingresos pondría en riesgo el dividendo?`;
+}
+
+function buildAETHERPart2(c,part1){
+  return `Eres AETHER. Continúas el análisis de ${c.name} (${c.ticker}) para inversor de dividendos largo plazo.
+Contexto parte 1: ${part1.slice(0,400)}...
+Responde en español, texto plano sin markdown.
+
+PUNTO 12 — ENTORNO MACRO Y TIPOS DE INTERÉS
+Sensibilidad a tipos, competencia con bono 10 años actual, riesgos regulatorios.
+
+PUNTO 13 — COMPETIDORES DEL DIVIDENDO EN EL SECTOR
+2-3 alternativas. Compara yield, crecimiento dividendo y FCF payout. ¿Es ${c.name} la mejor opción?
+
+PUNTO 14 — ROIC Y CREACIÓN DE VALOR
+ROIC medio 5 años vs WACC. ¿Crea o destruye valor?
+
+PUNTO 15 — CALIDAD DIRECTIVA Y ASIGNACIÓN DE CAPITAL
+Track record bajo presión. ¿Han protegido el dividendo en crisis?
+
+PUNTO 16 — RIESGO DE DISRUPCIÓN Y RELEVANCIA A 10 AÑOS
+Probabilidad disrupción. Impacto IA. ¿El moat aguanta?
+
+PUNTO 17 — ESCENARIOS A 3 AÑOS (FOCO EN EL DIVIDENDO)
+Optimista (25%), Base (55%), Pesimista (20%): qué pasa con el dividendo en cada caso y rentabilidad total. Rentabilidad ponderada esperada.
+
+PUNTO 18 — RENTABILIDAD ESPERADA A 5 Y 10 AÑOS
+Yield + crecimiento dividendo + cambio múltiplo. TIR total vs bono 10 años.
+
+PUNTO 19 — RANGOS DE ENTRADA
+Precio óptimo (yield > media histórica +10%), razonable (en línea), caro (bajo media). Precio actual y conclusión.
+
+PUNTO 20 — SCORING AETHER FINAL
+Calidad negocio /10, Moat /10, Solidez financiera /10, Dividendo /10, Valoración /10, Directiva /10. Total XX/60. Veredicto final.
+
+PUNTO 21 — FECHA Y VIGENCIA
+Fecha de hoy. Eventos que invalidarían este análisis antes de la próxima revisión.`;
+}
+
 function parseMeta(text){
-  const get=(key)=>{
-    const m=text.match(new RegExp(key+':\\[?([^\\]\\n]+)\\]?'));
-    return m?m[1].trim():null;
-  };
-  return {
-    semaforo: get('SEMAFORO'),
-    exec: get('EXEC'),
-    yoc:{ actual:get('YOC_ACTUAL'), yoc5:get('YOC_5'), yoc10:get('YOC_10'), crecimiento:get('YOC_CREC') },
-    score: get('SCORE')
-  };
+  const get=key=>{const m=text.match(new RegExp(key+':\\[?([^\\]\\n]+)\\]?'));return m?m[1].trim():null;};
+  return{semaforo:get('SEMAFORO'),exec:get('EXEC'),score:get('SCORE'),
+    yoc:{actual:get('YOC_ACTUAL'),yoc5:get('YOC_5'),yoc10:get('YOC_10'),crecimiento:get('YOC_CREC')}};
 }
-
-function cleanText(text){
+function cleanMeta(text){
   return text
-    .replace(/SEMAFORO:\[?[^\]\n]+\]?/g,'')
-    .replace(/EXEC:\[?[^\]\n]+\]?/g,'')
-    .replace(/YOC_ACTUAL:\[?[^\]\n]+\]?/g,'')
-    .replace(/YOC_5:\[?[^\]\n]+\]?/g,'')
-    .replace(/YOC_10:\[?[^\]\n]+\]?/g,'')
-    .replace(/YOC_CREC:\[?[^\]\n]+\]?/g,'')
-    .replace(/SCORE:\[?[^\]\n]+\]?/g,'')
-    .replace(/\n{3,}/g,'\n\n').trim();
+    .replace(/SEMAFORO:\[?[^\]\n]+\]?/g,'').replace(/EXEC:\[?[^\]\n]+\]?/g,'')
+    .replace(/YOC_ACTUAL:\[?[^\]\n]+\]?/g,'').replace(/YOC_5:\[?[^\]\n]+\]?/g,'')
+    .replace(/YOC_10:\[?[^\]\n]+\]?/g,'').replace(/YOC_CREC:\[?[^\]\n]+\]?/g,'')
+    .replace(/SCORE:\[?[^\]\n]+\]?/g,'').replace(/\n{3,}/g,'\n\n').trim();
 }
 
-function parseQuickSemaforo(text){
-  const m=text.match(/SEMAFORO:\s*([A-ZÁÉÍÓÚ]+)/i);
-  return m?m[1].toUpperCase().trim():null;
-}
-
-async function runOne(i, type){
-  if(!apiKey){ alert('Guarda tu API key en Configuración.'); return; }
-  if(companies[i].loading) return;
-  companies[i].loading=true;
+async function runOne(i,type){
+  if(!apiKey){alert('Guarda tu API key en Configuración.');return;}
+  if(companies[i].loading)return;
   companies[i].viewTab=type;
-  renderCompanies();
-  const prompt=type==='aether'?buildAETHERPrompt(companies[i]):buildQuickPrompt(companies[i]);
-  try{
-    const raw=await callAPI(prompt);
-    const date=nowStr();
-    if(type==='aether'){
-      const meta=parseMeta(raw);
-      const clean=cleanText(raw);
-      companies[i].aether={
-        text: clean,
-        date,
-        semaforo: meta.semaforo,
-        exec: meta.exec,
-        yoc: meta.yoc ? { ...meta.yoc, score: meta.score } : null
-      };
-    } else {
-      const sem=parseQuickSemaforo(raw);
-      const cleanQ=raw.replace(/SEMAFORO:\s*[A-ZÁÉÍÓÚ]+/i,'').trim();
-      companies[i].quick={ text:cleanQ, date, semaforo:sem };
-    }
-    logHistory(companies[i].ticker, companies[i].name, type,
-      type==='aether'?companies[i].aether.text:companies[i].quick.text);
-  } catch(e){
-    const errText=`Error: ${e.message}`;
-    if(type==='aether') companies[i].aether={text:errText,date:nowStr(),semaforo:null,exec:null,yoc:null};
-    else companies[i].quick={text:errText,date:nowStr(),semaforo:null};
+  if(type==='quick'){
+    setLoading(i,'Consultando datos en tiempo real…',30);
+    try{
+      const raw=await callAPI(buildQuickPrompt(companies[i]),1500);
+      const m=raw.match(/SEMAFORO:\[?([^\]\n]+)\]?/i);
+      const sem=m?m[1].trim().toUpperCase():null;
+      const clean=raw.replace(/SEMAFORO:\[?[^\]\n]+\]?/i,'').trim();
+      companies[i].quick={text:clean,date:nowStr(),semaforo:sem};
+    }catch(e){companies[i].quick={text:`Error: ${e.message}`,date:nowStr(),semaforo:null};}
+    companies[i].loading=false;save();renderCompanies();renderDashboard();
+    logHistory(companies[i].ticker,companies[i].name,'quick',companies[i].quick.text);
+    return;
   }
-  companies[i].loading=false;
-  save(); renderCompanies();
+  setLoading(i,'Fase 1/2 — Fundamentos y dividendo (puntos 1-11)…',15);
+  let part1='',meta=null;
+  try{
+    part1=await callAPI(buildAETHERPart1(companies[i]),4500);
+    meta=parseMeta(part1);
+    companies[i].loadingPhase='Fase 2/2 — Macro, escenarios y scoring (puntos 12-21)…';
+    companies[i].loadingPct=55;renderCompanies();
+    const part2=await callAPI(buildAETHERPart2(companies[i],part1),4500);
+    const fullText=cleanMeta(part1)+'\n\n'+part2.trim();
+    companies[i].aether={text:fullText,date:nowStr(),semaforo:meta?.semaforo,exec:meta?.exec,
+      yoc:meta?.yoc?{...meta.yoc,score:meta.score}:null};
+    logHistory(companies[i].ticker,companies[i].name,'aether',fullText);
+  }catch(e){
+    companies[i].aether={text:`Error: ${e.message}`,date:nowStr(),semaforo:null,exec:null,yoc:null};
+  }
+  companies[i].loading=false;save();renderCompanies();renderDashboard();
 }
 
 async function runAll(type){
-  if(!apiKey){ alert('Guarda tu API key en Configuración.'); return; }
-  if(running) return;
-  running=true;
+  if(!apiKey){alert('Guarda tu API key en Configuración.');return;}
+  if(running)return;running=true;
   const btnId=type==='aether'?'btn-aether-all':'btn-quick-all';
-  const btn=document.getElementById(btnId);
-  btn.disabled=true;
-  const orig=btn.innerHTML;
-  btn.innerHTML=`<span class="spinner"></span> Analizando…`;
-  for(let i=0;i<companies.length;i++){
-    if(!companies[i].loading) await runOne(i,type);
-  }
-  running=false;
-  btn.disabled=false;
-  btn.innerHTML=orig;
+  const btn=document.getElementById(btnId);btn.disabled=true;
+  const orig=btn.innerHTML;btn.innerHTML=`<span class="spinner"></span> Analizando…`;
+  for(let i=0;i<companies.length;i++){if(!companies[i].loading)await runOne(i,type);}
+  running=false;btn.disabled=false;btn.innerHTML=orig;
 }
 
 function logHistory(ticker,name,type,text){
-  history.push({ticker,name,type,text,date:nowStr()});
-  saveHist(); renderHistory();
+  history.push({ticker,name,type,text,date:nowStr()});saveHist();renderHistory();
 }
-
 function renderHistory(){
   const el=document.getElementById('hist-list');
-  if(!history.length){
-    el.innerHTML='<div class="empty"><div class="empty-icon">🕐</div>Aún no hay análisis guardados.</div>';
-    return;
-  }
+  if(!history.length){el.innerHTML='<div class="empty"><div class="empty-icon">🕐</div>Aún no hay análisis guardados.</div>';return;}
   el.innerHTML=history.slice().reverse().map(h=>`
     <div class="hist-item">
       <div class="hist-meta">
         <span class="hist-tk">${esc(h.ticker)}</span>
         <span class="hist-type-pill ${h.type==='aether'?'hist-type-aether':'hist-type-quick'}">${h.type==='aether'?'✦ AETHER':'⚡ Rápido'}</span>
-        <span>${esc(h.name)}</span>
-        <span style="margin-left:auto">${h.date}</span>
+        <span>${esc(h.name)}</span><span style="margin-left:auto">${h.date}</span>
       </div>
       <div class="hist-text">${esc(h.text.slice(0,400))}${h.text.length>400?'…':''}</div>
     </div>`).join('');
 }
-
 function switchPanel(name,btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   document.getElementById('panel-'+name).classList.add('active');
-  btn.classList.add('active');
+  if(btn)btn.classList.add('active');
+  else document.querySelector(`.nav-item[onclick*="${name}"]`)?.classList.add('active');
+  if(name==='dashboard')renderDashboard();
 }
-
 function clearHistory(){
-  if(!confirm('¿Borrar todo el historial?')) return;
-  history=[];
-  try{localStorage.removeItem(HK);}catch(e){}
-  renderHistory();
+  if(!confirm('¿Borrar todo el historial?'))return;
+  history=[];try{localStorage.removeItem(HK);}catch(e){}renderHistory();
 }
-
 function clearAll(){
-  if(!confirm('¿Borrar TODOS los datos? No se puede deshacer.')) return;
+  if(!confirm('¿Borrar TODOS los datos?'))return;
   companies=[];history=[];apiKey='';
   try{localStorage.removeItem(SK);localStorage.removeItem(HK);localStorage.removeItem(AK);}catch(e){}
-  renderCompanies();renderHistory();updateStatusUI();
+  renderCompanies();renderHistory();renderDashboard();updateStatusUI();
 }
-
 document.getElementById('i-sector').addEventListener('keydown',e=>{if(e.key==='Enter')addCompany();});
 document.getElementById('api-key-cfg').addEventListener('keydown',e=>{if(e.key==='Enter')saveKeyCfg();});
-
 load();
 </script>
 </body>
